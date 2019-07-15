@@ -103,4 +103,34 @@ public interface ItemIdentificationConfig extends Config
 	{
 		return false;
 	}
+
+	@ConfigItem(
+			keyName = "showNets",
+			name = "Nets",
+			description = "Show identification on Fishing nets"
+	)
+	default boolean showNets()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+			keyName = "showGreegrees",
+			name = "Greegrees",
+			description = "Show identification on Monkey Greegrees"
+	)
+	default boolean showGreegrees()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+			keyName = "showBones",
+			name = "Bones",
+			description = "Show identification on Bones"
+	)
+	default boolean showBones()
+	{
+		return false;
+	}
 }
