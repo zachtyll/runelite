@@ -38,12 +38,12 @@ class ItemChargeInfobox extends Counter
 	private final EquipmentInventorySlot slot;
 
 	ItemChargeInfobox(
-		ItemChargePlugin plugin,
-		BufferedImage image,
-		String name,
-		int charges,
-		ItemWithSlot item,
-		EquipmentInventorySlot slot)
+			ItemChargePlugin plugin,
+			BufferedImage image,
+			String name,
+			int charges,
+			ItemWithSlot item,
+			EquipmentInventorySlot slot)
 	{
 		super(image, plugin, charges);
 		setTooltip(name);

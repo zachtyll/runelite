@@ -69,15 +69,6 @@ class ItemChargeOverlay extends WidgetItemOverlay
 		graphics.setFont(FontManager.getRunescapeSmallFont());
 
 		int charges;
-		if (itemId == ItemID.RING_OF_FORGING)
-		{
-			if (!config.showRingOfForgingCount())
-			{
-				return;
-			}
-
-			charges = config.ringOfForging();
-		}
 		if (itemId == ItemID.DODGY_NECKLACE)
 		{
 			if (!config.showDodgyCount())
@@ -115,14 +106,14 @@ class ItemChargeOverlay extends WidgetItemOverlay
 
 			ItemChargeType type = chargeItem.getType();
 			if ((type == TELEPORT && !config.showTeleportCharges())
-				|| (type == FUNGICIDE_SPRAY && !config.showFungicideCharges())
-				|| (type == IMPBOX && !config.showImpCharges())
-				|| (type == WATERCAN && !config.showWateringCanCharges())
-				|| (type == WATERSKIN && !config.showWaterskinCharges())
-				|| (type == BELLOWS && !config.showBellowCharges())
-				|| (type == FRUIT_BASKET && !config.showBasketCharges())
-				|| (type == SACK && !config.showSackCharges())
-				|| (type == ABYSSAL_BRACELET && !config.showAbyssalBraceletCharges()))
+					|| (type == FUNGICIDE_SPRAY && !config.showFungicideCharges())
+					|| (type == IMPBOX && !config.showImpCharges())
+					|| (type == WATERCAN && !config.showWateringCanCharges())
+					|| (type == WATERSKIN && !config.showWaterskinCharges())
+					|| (type == BELLOWS && !config.showBellowCharges())
+					|| (type == FRUIT_BASKET && !config.showBasketCharges())
+					|| (type == SACK && !config.showSackCharges())
+					|| (type == ABYSSAL_BRACELET && !config.showAbyssalBraceletCharges()))
 			{
 				return;
 			}
@@ -140,9 +131,9 @@ class ItemChargeOverlay extends WidgetItemOverlay
 
 	private boolean displayOverlay()
 	{
-		return config.showTeleportCharges() || config.showRingOfForgingCount() || config.showDodgyCount() || config.showFungicideCharges()
-			|| config.showImpCharges() || config.showWateringCanCharges() || config.showWaterskinCharges()
-			|| config.showBellowCharges() || config.showBasketCharges() || config.showSackCharges()
-			|| config.showAbyssalBraceletCharges() || config.showExplorerRingCharges();
+		return config.showTeleportCharges() || config.showDodgyCount() || config.showFungicideCharges()
+				|| config.showImpCharges() || config.showWateringCanCharges() || config.showWaterskinCharges()
+				|| config.showBellowCharges() || config.showBasketCharges() || config.showSackCharges()
+				|| config.showAbyssalBraceletCharges() || config.showExplorerRingCharges();
 	}
 }
