@@ -94,7 +94,10 @@ public interface ItemChargeConfig extends Config
 			description = "Configures if the Ring of Forging charge count is shown",
 			position = 6
 	)
-	default boolean showRingOfForgingCount() { return true; }
+	default boolean showRingOfForgingCount()
+	{
+		return true;
+	}
 
 	@ConfigItem(
 			keyName = "RingOfForgingNotification",
@@ -102,7 +105,10 @@ public interface ItemChargeConfig extends Config
 			description = "Configures if the Ring of Forging breaking notification is shown",
 			position = 7
 	)
-	default boolean ringOfForgingNotification() { return true; }
+	default boolean ringOfForgingNotification()
+	{
+		return true;
+	}
 
 	@ConfigItem(
 			keyName = "ringOfForging",
@@ -110,7 +116,10 @@ public interface ItemChargeConfig extends Config
 			description = "",
 			hidden = true
 	)
-	default int ringOfForging() { return -1; }
+	default int ringOfForging()
+	{
+		return -1;
+	}
 
 	@ConfigItem(
 			keyName = "ringOfForging",
@@ -208,7 +217,7 @@ public interface ItemChargeConfig extends Config
 			name = "Show Bellow Charges",
 			description = "Configures if ogre bellow item charge is shown",
 			position = 14
-    )
+	)
 	default boolean showBellowCharges()
 	{
 		return true;
@@ -219,7 +228,7 @@ public interface ItemChargeConfig extends Config
 			name = "Show Abyssal Bracelet Charges",
 			description = "Configures if abyssal bracelet item charge is shown",
 			position = 15
-    )
+	)
 	default boolean showAbyssalBraceletCharges()
 	{
 		return true;
@@ -276,27 +285,27 @@ public interface ItemChargeConfig extends Config
 		return true;
 	}
 
-    @ConfigItem(
-            keyName = "showBasketCharges",
-            name = "Show Basket Charges",
-            description = "Configures if fruit basket item charge is shown",
-            position = 19
-    )
-    default boolean showBasketCharges()
-    {
-        return true;
-    }
+	@ConfigItem(
+		keyName = "showBasketCharges",
+		name = "Show Basket Charges",
+		description = "Configures if fruit basket item charge is shown",
+		position = 19
+	)
+	default boolean showBasketCharges()
+	{
+		return true;
+	}
 
-    @ConfigItem(
-            keyName = "showSackCharges",
-            name = "Show Sack Charges",
-            description = "Configures if sack item charge is shown",
-            position = 20
-    )
-    default boolean showSackCharges()
-    {
-        return true;
-    }
+	@ConfigItem(
+		keyName = "showSackCharges",
+		name = "Show Sack Charges",
+		description = "Configures if sack item charge is shown",
+		position = 20
+	)
+	default boolean showSackCharges()
+	{
+		return true;
+	}
 
 	@ConfigItem(
 		keyName = "showExplorerRingCharges",
