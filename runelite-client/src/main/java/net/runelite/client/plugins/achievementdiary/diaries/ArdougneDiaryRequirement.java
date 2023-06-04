@@ -42,8 +42,6 @@ public class ArdougneDiaryRequirement extends GenericDiaryRequirement
 			new SkillRequirement(Skill.THIEVING, 5));
 		add("Enter the Combat Training Camp north of W. Ardougne.",
 			new QuestRequirement(Quest.BIOHAZARD));
-		add("Go out fishing on the Fishing Trawler.",
-			new SkillRequirement(Skill.FISHING, 15));
 
 		// MEDIUM
 		add("Enter the Unicorn pen in Ardougne zoo using Fairy rings.",
@@ -87,7 +85,7 @@ public class ArdougneDiaryRequirement extends GenericDiaryRequirement
 			new QuestRequirement(Quest.LEGENDS_QUEST));
 		add("Enter the Magic Guild.",
 			new SkillRequirement(Skill.MAGIC, 66));
-		add("Attempt to steal from King Lathas' chest.",
+		add("Attempt to steal from a chest in Ardougne Castle.",
 			new SkillRequirement(Skill.THIEVING, 72));
 		add("Have a zookeeper put you in Ardougne Zoo's monkey cage.",
 			new QuestRequirement(Quest.MONKEY_MADNESS_I, true));
@@ -107,9 +105,9 @@ public class ArdougneDiaryRequirement extends GenericDiaryRequirement
 		add("Smith a Dragon sq shield in West Ardougne.",
 			new SkillRequirement(Skill.SMITHING, 60),
 			new QuestRequirement(Quest.LEGENDS_QUEST));
-		add("Craft some Death runes.",
+		add("Craft some Death runes from Essence.",
 			new SkillRequirement(Skill.RUNECRAFT, 65),
-			new QuestRequirement(Quest.MOURNINGS_ENDS_PART_II));
+			new QuestRequirement(Quest.MOURNINGS_END_PART_II));
 
 		// ELITE
 		add("Catch a Manta ray in the Fishing Trawler and cook it in Port Khazard.",
@@ -130,8 +128,8 @@ public class ArdougneDiaryRequirement extends GenericDiaryRequirement
 			new SkillRequirement(Skill.FARMING, 85));
 		add("Complete a lap of Ardougne's rooftop agility course.",
 			new SkillRequirement(Skill.AGILITY, 90));
-		add("Cast Ice Barrage on another player within Castlewars.",
+		add("Cast Ice Barrage on another player within Castle Wars.",
 			new SkillRequirement(Skill.MAGIC, 94),
-			new QuestRequirement(Quest.DESERT_TREASURE));
+			new QuestRequirement(Quest.DESERT_TREASURE_I));
 	}
 }

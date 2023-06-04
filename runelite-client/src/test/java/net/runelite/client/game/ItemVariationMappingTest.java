@@ -31,7 +31,7 @@ import static net.runelite.api.ItemID.*;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ItemVariationMappingTest
@@ -60,8 +60,8 @@ public class ItemVariationMappingTest
 		put(ANTIDOTE2, ANTIDOTE_UNF);
 		put(ANTIDOTE3, ANTIDOTE_UNF);
 		put(ANTIDOTE4, ANTIDOTE_UNF);
-		put(ANTIDOTE1_5958, ANTIDOTE_UNF);
-		put(ANTIDOTE2_5956, ANTIDOTE_UNF);
+		put(ANTIDOTE1_5958, ANTIDOTE_UNF_5951);
+		put(ANTIDOTE2_5956, ANTIDOTE_UNF_5951);
 		put(APPLES2, APPLES1);
 		put(APPLES3, APPLES1);
 		put(APPLES4, APPLES1);
@@ -217,11 +217,6 @@ public class ItemVariationMappingTest
 		put(ORANGES5, ORANGES1);
 		put(OVERLOAD_1, OVERLOAD_4);
 		put(OVERLOAD_2, OVERLOAD_4);
-		put(PHARAOHS_SCEPTRE_3, PHARAOHS_SCEPTRE_3);
-		put(PHARAOHS_SCEPTRE_4, PHARAOHS_SCEPTRE_3);
-		put(PHARAOHS_SCEPTRE_5, PHARAOHS_SCEPTRE_3);
-		put(PHARAOHS_SCEPTRE_6, PHARAOHS_SCEPTRE_3);
-		put(PHARAOHS_SCEPTRE_7, PHARAOHS_SCEPTRE_3);
 		put(PRAEL_BAT_1, PRAEL_BAT_1);
 		put(PRAYER_CAPET, PRAYER_CAPE);
 		put(PRAYER_ENHANCE_1_20965, PRAYER_ENHANCE_1);

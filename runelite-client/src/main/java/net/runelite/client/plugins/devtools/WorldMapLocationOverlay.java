@@ -32,10 +32,11 @@ import java.awt.Rectangle;
 import javax.inject.Inject;
 import net.runelite.api.Client;
 import net.runelite.api.Point;
-import net.runelite.api.RenderOverview;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.widgets.Widget;
+import net.runelite.api.widgets.WidgetID;
 import net.runelite.api.widgets.WidgetInfo;
+import net.runelite.api.worldmap.WorldMap;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
@@ -55,8 +56,9 @@ public class WorldMapLocationOverlay extends Overlay
 		this.worldMapOverlay = worldMapOverlay;
 		this.plugin = plugin;
 		setPosition(OverlayPosition.DYNAMIC);
-		setPriority(OverlayPriority.HIGH);
-		setLayer(OverlayLayer.ABOVE_MAP);
+		setPriority(OverlayPriority.HIGHEST);
+		setLayer(OverlayLayer.MANUAL);
+		drawAfterInterface(WidgetID.WORLD_MAP_GROUP_ID);
 	}
 
 	@Override
@@ -67,10 +69,10 @@ public class WorldMapLocationOverlay extends Overlay
 			return null;
 		}
 
-		RenderOverview ro = client.getRenderOverview();
+		WorldMap worldMap = client.getWorldMap();
 		Widget worldMapWidget = client.getWidget(WidgetInfo.WORLD_MAP_VIEW);
 
-		if (ro == null || worldMapWidget == null)
+		if (worldMap == null || worldMapWidget == null)
 		{
 			return null;
 		}
@@ -80,7 +82,7 @@ public class WorldMapLocationOverlay extends Overlay
 		graphics.setClip(worldMapRectangle);
 		graphics.setColor(Color.CYAN);
 
-		WorldPoint mapCenterPoint = new WorldPoint(ro.getWorldMapPosition().getX(), ro.getWorldMapPosition().getY(), 0);
+		WorldPoint mapCenterPoint = new WorldPoint(worldMap.getWorldMapPosition().getX(), worldMap.getWorldMapPosition().getY(), 0);
 		Point middle = worldMapOverlay.mapWorldPointToGraphicsPoint(mapCenterPoint);
 
 		if (middle == null)

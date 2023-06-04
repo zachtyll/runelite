@@ -1,6 +1,7 @@
 /*
  * Copyright (c) 2018, terminatusx <jbfleischman@gmail.com>
  * Copyright (c) 2018, Adam <Adam@sigterm.info>
+ * Copyright (c) 2020, loldudester <HannahRyanster@gmail.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,6 +34,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import static net.runelite.api.AnimationID.CONSTRUCTION;
+import static net.runelite.api.AnimationID.CONSTRUCTION_IMCANDO;
 import static net.runelite.api.AnimationID.FIREMAKING;
 import static net.runelite.api.AnimationID.FLETCHING_BOW_CUTTING;
 import static net.runelite.api.AnimationID.IDLE;
@@ -41,12 +43,16 @@ import static net.runelite.api.AnimationID.WOODCUTTING_3A_AXE;
 import static net.runelite.api.AnimationID.WOODCUTTING_ADAMANT;
 import static net.runelite.api.AnimationID.WOODCUTTING_BLACK;
 import static net.runelite.api.AnimationID.WOODCUTTING_BRONZE;
+import static net.runelite.api.AnimationID.WOODCUTTING_CRYSTAL;
 import static net.runelite.api.AnimationID.WOODCUTTING_DRAGON;
+import static net.runelite.api.AnimationID.WOODCUTTING_DRAGON_OR;
+import static net.runelite.api.AnimationID.WOODCUTTING_GILDED;
 import static net.runelite.api.AnimationID.WOODCUTTING_INFERNAL;
 import static net.runelite.api.AnimationID.WOODCUTTING_IRON;
 import static net.runelite.api.AnimationID.WOODCUTTING_MITHRIL;
 import static net.runelite.api.AnimationID.WOODCUTTING_RUNE;
 import static net.runelite.api.AnimationID.WOODCUTTING_STEEL;
+import static net.runelite.api.AnimationID.WOODCUTTING_TRAILBLAZER;
 import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
 import net.runelite.api.InventoryID;
@@ -63,11 +69,13 @@ import net.runelite.api.events.GameTick;
 import net.runelite.api.events.ItemContainerChanged;
 import net.runelite.api.events.VarbitChanged;
 import net.runelite.client.Notifier;
-import net.runelite.client.chat.ChatMessageManager;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
+import net.runelite.client.plugins.wintertodt.config.WintertodtNotifyDamage;
+import static net.runelite.client.plugins.wintertodt.config.WintertodtNotifyDamage.ALWAYS;
+import static net.runelite.client.plugins.wintertodt.config.WintertodtNotifyDamage.INTERRUPT;
 import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.util.ColorUtil;
 
@@ -96,9 +104,6 @@ public class WintertodtPlugin extends Plugin
 	@Inject
 	private WintertodtConfig config;
 
-	@Inject
-	private ChatMessageManager chatMessageManager;
-
 	@Getter(AccessLevel.PACKAGE)
 	private WintertodtActivity currentActivity = WintertodtActivity.IDLE;
 
@@ -116,6 +121,7 @@ public class WintertodtPlugin extends Plugin
 
 	@Getter(AccessLevel.PACKAGE)
 	private boolean isInWintertodt;
+	private boolean needRoundNotif;
 
 	private Instant lastActionTime;
 
@@ -170,9 +176,9 @@ public class WintertodtPlugin extends Plugin
 			{
 				log.debug("Left Wintertodt!");
 				reset();
+				isInWintertodt = false;
+				needRoundNotif = true;
 			}
-
-			isInWintertodt = false;
 			return;
 		}
 
@@ -180,8 +186,8 @@ public class WintertodtPlugin extends Plugin
 		{
 			reset();
 			log.debug("Entered Wintertodt!");
+			isInWintertodt = true;
 		}
-		isInWintertodt = true;
 
 		checkActionTimeout();
 	}
@@ -189,13 +195,14 @@ public class WintertodtPlugin extends Plugin
 	@Subscribe
 	public void onVarbitChanged(VarbitChanged varbitChanged)
 	{
-		int timerValue = client.getVar(Varbits.WINTERTODT_TIMER);
-		if (timerValue != previousTimerValue)
+		if (varbitChanged.getVarbitId() == Varbits.WINTERTODT_TIMER)
 		{
 			int timeToNotify = config.roundNotification();
-			if (timeToNotify > 0)
+			// Sometimes wt var updates are sent to players even after leaving wt.
+			// So only notify if in wt or after just having left.
+			if (timeToNotify > 0 && (isInWintertodt || needRoundNotif))
 			{
-				int timeInSeconds = timerValue * 30 / 50;
+				int timeInSeconds = varbitChanged.getValue() * 30 / 50;
 				int prevTimeInSeconds = previousTimerValue * 30 / 50;
 
 				log.debug("Seconds left until round start: {}", timeInSeconds);
@@ -203,10 +210,11 @@ public class WintertodtPlugin extends Plugin
 				if (prevTimeInSeconds > timeToNotify && timeInSeconds <= timeToNotify)
 				{
 					notifier.notify("Wintertodt round is about to start");
+					needRoundNotif = false;
 				}
 			}
 
-			previousTimerValue = timerValue;
+			previousTimerValue = varbitChanged.getValue();
 		}
 	}
 
@@ -251,6 +259,12 @@ public class WintertodtPlugin extends Plugin
 		MessageNode messageNode = chatMessage.getMessageNode();
 		final WintertodtInterruptType interruptType;
 
+		if (messageNode.getValue().startsWith("You carefully fletch the root"))
+		{
+			setActivity(WintertodtActivity.FLETCHING);
+			return;
+		}
+
 		if (messageNode.getValue().startsWith("The cold of"))
 		{
 			interruptType = WintertodtInterruptType.COLD;
@@ -289,7 +303,6 @@ public class WintertodtPlugin extends Plugin
 		}
 
 		boolean wasInterrupted = false;
-		boolean wasDamaged = false;
 		boolean neverNotify = false;
 
 		switch (interruptType)
@@ -297,15 +310,13 @@ public class WintertodtPlugin extends Plugin
 			case COLD:
 			case BRAZIER:
 			case SNOWFALL:
-				wasDamaged = true;
 
 				// Recolor message for damage notification
 				messageNode.setRuneLiteFormatMessage(ColorUtil.wrapWithColorTag(messageNode.getValue(), config.damageNotificationColor()));
-				chatMessageManager.update(messageNode);
 				client.refreshChat();
 
-				// all actions except woodcutting are interrupted from damage
-				if (currentActivity != WintertodtActivity.WOODCUTTING)
+				// all actions except woodcutting and idle are interrupted from damage
+				if (currentActivity != WintertodtActivity.WOODCUTTING && currentActivity != WintertodtActivity.IDLE)
 				{
 					wasInterrupted = true;
 				}
@@ -326,23 +337,28 @@ public class WintertodtPlugin extends Plugin
 		if (!neverNotify)
 		{
 			boolean shouldNotify = false;
-
-			switch (config.notifyCondition())
+			switch (interruptType)
 			{
-				case ONLY_WHEN_INTERRUPTED:
-					if (wasInterrupted)
-					{
-						shouldNotify = true;
-					}
+				case COLD:
+					WintertodtNotifyDamage notify = config.notifyCold();
+					shouldNotify = notify == ALWAYS || (notify == INTERRUPT && wasInterrupted);
 					break;
-				case WHEN_DAMAGED:
-					if (wasDamaged)
-					{
-						shouldNotify = true;
-					}
+				case SNOWFALL:
+					notify = config.notifySnowfall();
+					shouldNotify = notify == ALWAYS || (notify == INTERRUPT && wasInterrupted);
 					break;
-				case EITHER:
-					shouldNotify = true;
+				case BRAZIER:
+					notify = config.notifyBrazierDamage();
+					shouldNotify = notify == ALWAYS || (notify == INTERRUPT && wasInterrupted);
+					break;
+				case INVENTORY_FULL:
+					shouldNotify = config.notifyFullInv();
+					break;
+				case OUT_OF_ROOTS:
+					shouldNotify = config.notifyEmptyInv();
+					break;
+				case BRAZIER_WENT_OUT:
+					shouldNotify = config.notifyBrazierOut();
 					break;
 			}
 
@@ -402,9 +418,13 @@ public class WintertodtPlugin extends Plugin
 			case WOODCUTTING_MITHRIL:
 			case WOODCUTTING_ADAMANT:
 			case WOODCUTTING_RUNE:
+			case WOODCUTTING_GILDED:
 			case WOODCUTTING_DRAGON:
+			case WOODCUTTING_DRAGON_OR:
 			case WOODCUTTING_INFERNAL:
 			case WOODCUTTING_3A_AXE:
+			case WOODCUTTING_CRYSTAL:
+			case WOODCUTTING_TRAILBLAZER:
 				setActivity(WintertodtActivity.WOODCUTTING);
 				break;
 
@@ -421,6 +441,7 @@ public class WintertodtPlugin extends Plugin
 				break;
 
 			case CONSTRUCTION:
+			case CONSTRUCTION_IMCANDO:
 				setActivity(WintertodtActivity.FIXING_BRAZIER);
 				break;
 		}

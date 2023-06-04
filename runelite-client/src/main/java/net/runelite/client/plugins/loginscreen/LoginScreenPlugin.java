@@ -24,25 +24,37 @@
  */
 package net.runelite.client.plugins.loginscreen;
 
+import com.google.common.base.CharMatcher;
 import com.google.common.base.Strings;
 import com.google.inject.Provides;
 import java.awt.Toolkit;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Random;
+import javax.imageio.ImageIO;
 import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
+import net.runelite.api.Constants;
 import net.runelite.api.GameState;
+import net.runelite.api.SpritePixels;
 import net.runelite.api.events.GameStateChanged;
-import net.runelite.client.events.SessionOpen;
+import net.runelite.client.RuneLite;
+import net.runelite.client.callback.ClientThread;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
+import net.runelite.client.events.ConfigChanged;
+import net.runelite.client.events.ProfileChanged;
 import net.runelite.client.input.KeyListener;
 import net.runelite.client.input.KeyManager;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
+import net.runelite.client.util.ImageUtil;
 import net.runelite.client.util.OSType;
 
 @PluginDescriptor(
@@ -53,11 +65,14 @@ import net.runelite.client.util.OSType;
 public class LoginScreenPlugin extends Plugin implements KeyListener
 {
 	private static final int MAX_USERNAME_LENGTH = 254;
-	private static final int MAX_PASSWORD_LENGTH = 20;
 	private static final int MAX_PIN_LENGTH = 6;
+	private static final File CUSTOM_LOGIN_SCREEN_FILE = new File(RuneLite.RUNELITE_DIR, "login.png");
 
 	@Inject
 	private Client client;
+
+	@Inject
+	private ClientThread clientThread;
 
 	@Inject
 	private LoginScreenConfig config;
@@ -72,6 +87,7 @@ public class LoginScreenPlugin extends Plugin implements KeyListener
 	{
 		applyUsername();
 		keyManager.registerKeyListener(this);
+		clientThread.invoke(this::overrideLoginScreen);
 	}
 
 	@Override
@@ -83,12 +99,26 @@ public class LoginScreenPlugin extends Plugin implements KeyListener
 		}
 
 		keyManager.unregisterKeyListener(this);
+		clientThread.invoke(() ->
+		{
+			restoreLoginScreen();
+			client.setShouldRenderLoginScreenFire(true);
+		});
 	}
 
 	@Provides
 	LoginScreenConfig getConfig(ConfigManager configManager)
 	{
 		return configManager.getConfig(LoginScreenConfig.class);
+	}
+
+	@Subscribe
+	public void onConfigChanged(ConfigChanged event)
+	{
+		if (event.getGroup().equals("loginscreen"))
+		{
+			clientThread.invoke(this::overrideLoginScreen);
+		}
 	}
 
 	@Subscribe
@@ -123,7 +153,7 @@ public class LoginScreenPlugin extends Plugin implements KeyListener
 	}
 
 	@Subscribe
-	public void onSessionOpen(SessionOpen event)
+	public void onProfileChanged(ProfileChanged profileChanged)
 	{
 		// configuation for the account is available now, so update the username
 		applyUsername();
@@ -157,6 +187,12 @@ public class LoginScreenPlugin extends Plugin implements KeyListener
 	}
 
 	@Override
+	public boolean isEnabledOnLoginScreen()
+	{
+		return true;
+	}
+
+	@Override
 	public void keyTyped(KeyEvent e)
 	{
 	}
@@ -178,7 +214,7 @@ public class LoginScreenPlugin extends Plugin implements KeyListener
 		{
 			try
 			{
-				final String data = Toolkit
+				String data = Toolkit
 					.getDefaultToolkit()
 					.getSystemClipboard()
 					.getData(DataFlavor.stringFlavor)
@@ -194,16 +230,12 @@ public class LoginScreenPlugin extends Plugin implements KeyListener
 							// Truncate data to maximum username length if necessary
 							client.setUsername(data.substring(0, Math.min(data.length(), MAX_USERNAME_LENGTH)));
 						}
-						else
-						{
-							// Truncate data to maximum password length if necessary
-							client.setPassword(data.substring(0, Math.min(data.length(), MAX_PASSWORD_LENGTH)));
-						}
 
 						break;
 					// Authenticator form
 					case 4:
 						// Truncate data to maximum OTP code length if necessary
+						data = CharMatcher.inRange('0', '9').retainFrom(data);
 						client.setOtp(data.substring(0, Math.min(data.length(), MAX_PIN_LENGTH)));
 						break;
 				}
@@ -219,5 +251,83 @@ public class LoginScreenPlugin extends Plugin implements KeyListener
 	public void keyReleased(KeyEvent e)
 	{
 
+	}
+
+	private void overrideLoginScreen()
+	{
+		client.setShouldRenderLoginScreenFire(config.showLoginFire());
+
+		if (config.loginScreen() == LoginScreenOverride.OFF)
+		{
+			restoreLoginScreen();
+			return;
+		}
+
+		SpritePixels pixels = null;
+		if (config.loginScreen() == LoginScreenOverride.CUSTOM)
+		{
+			if (CUSTOM_LOGIN_SCREEN_FILE.exists())
+			{
+				try
+				{
+					BufferedImage image;
+					synchronized (ImageIO.class)
+					{
+						image = ImageIO.read(CUSTOM_LOGIN_SCREEN_FILE);
+					}
+
+					if (image.getHeight() > Constants.GAME_FIXED_HEIGHT)
+					{
+						final double scalar = Constants.GAME_FIXED_HEIGHT / (double) image.getHeight();
+						image = ImageUtil.resizeImage(image, (int) (image.getWidth() * scalar), Constants.GAME_FIXED_HEIGHT);
+					}
+					pixels = ImageUtil.getImageSpritePixels(image, client);
+				}
+				catch (IOException e)
+				{
+					log.error("error loading custom login screen", e);
+					restoreLoginScreen();
+					return;
+				}
+			}
+		}
+		else if (config.loginScreen() == LoginScreenOverride.RANDOM)
+		{
+			LoginScreenOverride[] filtered = Arrays.stream(LoginScreenOverride.values())
+				.filter(screen -> screen.getFileName() != null)
+				.toArray(LoginScreenOverride[]::new);
+			LoginScreenOverride randomScreen = filtered[new Random().nextInt(filtered.length)];
+			pixels = getFileSpritePixels(randomScreen.getFileName());
+		}
+		else
+		{
+			pixels = getFileSpritePixels(config.loginScreen().getFileName());
+		}
+
+		if (pixels != null)
+		{
+			client.setLoginScreen(pixels);
+		}
+	}
+
+	private void restoreLoginScreen()
+	{
+		client.setLoginScreen(null);
+	}
+
+	private SpritePixels getFileSpritePixels(String file)
+	{
+		try
+		{
+			log.debug("Loading: {}", file);
+			BufferedImage image = ImageUtil.loadImageResource(this.getClass(), file);
+			return ImageUtil.getImageSpritePixels(image, client);
+		}
+		catch (RuntimeException ex)
+		{
+			log.debug("Unable to load image: ", ex);
+		}
+
+		return null;
 	}
 }

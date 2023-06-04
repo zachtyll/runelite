@@ -36,7 +36,8 @@ import net.runelite.api.Client;
 @Slf4j
 public class ClientThread
 {
-	private ConcurrentLinkedQueue<BooleanSupplier> invokes = new ConcurrentLinkedQueue<>();
+	private final ConcurrentLinkedQueue<BooleanSupplier> invokes = new ConcurrentLinkedQueue<>();
+	private final ConcurrentLinkedQueue<BooleanSupplier> invokesAtTickEnd = new ConcurrentLinkedQueue<>();
 
 	@Inject
 	private Client client;
@@ -58,7 +59,7 @@ public class ClientThread
 	{
 		if (client.isClientThread())
 		{
-			if (r.getAsBoolean())
+			if (!r.getAsBoolean())
 			{
 				invokes.add(r);
 			}
@@ -86,11 +87,30 @@ public class ClientThread
 		invokes.add(r);
 	}
 
+	public void invokeAtTickEnd(Runnable r)
+	{
+		invokesAtTickEnd.add(() ->
+		{
+			r.run();
+			return true;
+		});
+	}
+
 	void invoke()
+	{
+		invokeList(invokes);
+	}
+
+	void invokeTickEnd()
+	{
+		invokeList(invokesAtTickEnd);
+	}
+
+	private void invokeList(ConcurrentLinkedQueue<BooleanSupplier> invokes)
 	{
 		assert client.isClientThread();
 		Iterator<BooleanSupplier> ir = invokes.iterator();
-		for (; ir.hasNext(); )
+		while (ir.hasNext())
 		{
 			BooleanSupplier r = ir.next();
 			boolean remove = true;
@@ -104,11 +124,15 @@ public class ClientThread
 			}
 			catch (Throwable e)
 			{
-				log.warn("Exception in invoke", e);
+				log.error("Exception in invoke", e);
 			}
 			if (remove)
 			{
 				ir.remove();
+			}
+			else
+			{
+				log.trace("Deferring task {}", r);
 			}
 		}
 	}

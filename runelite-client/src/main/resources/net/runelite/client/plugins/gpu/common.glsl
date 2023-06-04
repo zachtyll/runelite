@@ -23,7 +23,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include to_screen.glsl
+#include "to_screen.glsl"
 
 /*
  * Rotate a vertex by a given orientation in JAU
@@ -35,6 +35,14 @@ ivec4 rotate(ivec4 vertex, int orientation) {
   int x = vertex.z * s + vertex.x * c >> 16;
   int z = vertex.z * c - vertex.x * s >> 16;
   return ivec4(x, vertex.y, z, vertex.w);
+}
+
+vec3 rotatef(vec3 vertex, int orientation) {
+  float rad = orientation * UNIT;
+  float s = sin(rad);
+  float c = cos(rad);
+  mat3 m = mat3(c, 0, s, 0, 1, 0, -s, 0, c);
+  return vertex * m;
 }
 
 /*
@@ -67,16 +75,16 @@ int face_distance(ivec4 vA, ivec4 vB, ivec4 vC, int cameraYaw, int cameraPitch) 
 /*
  * Test if a face is visible (not backward facing)
  */
-bool face_visible(ivec4 vA, ivec4 vB, ivec4 vC, ivec4 position, int cameraYaw, int cameraPitch, int centerX, int centerY, int zoom) {
+bool face_visible(ivec4 vA, ivec4 vB, ivec4 vC, ivec4 position) {
   // Move model to scene location, and account for camera offset
   ivec4 cameraPos = ivec4(cameraX, cameraY, cameraZ, 0);
   vA += position - cameraPos;
   vB += position - cameraPos;
   vC += position - cameraPos;
 
-  ivec3 sA = toScreen(vA.xyz, cameraYaw, cameraPitch, centerX, centerY, zoom);
-  ivec3 sB = toScreen(vB.xyz, cameraYaw, cameraPitch, centerX, centerY, zoom);
-  ivec3 sC = toScreen(vC.xyz, cameraYaw, cameraPitch, centerX, centerY, zoom);
+  vec3 sA = toScreen(vA.xyz, cameraYaw, cameraPitch, centerX, centerY, zoom);
+  vec3 sB = toScreen(vB.xyz, cameraYaw, cameraPitch, centerX, centerY, zoom);
+  vec3 sC = toScreen(vC.xyz, cameraYaw, cameraPitch, centerX, centerY, zoom);
 
   return (sA.x - sB.x) * (sC.y - sB.y) - (sC.x - sB.x) * (sA.y - sB.y) > 0;
 }

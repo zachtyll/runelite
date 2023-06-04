@@ -49,11 +49,10 @@ class PrayerBarOverlay extends Overlay
 {
 	private static final Color BAR_FILL_COLOR = new Color(0, 149, 151);
 	private static final Color BAR_BG_COLOR = Color.black;
-	private static final Color FLICK_HELP_COLOR = Color.white;
 	private static final Dimension PRAYER_BAR_SIZE = new Dimension(30, 5);
 	private static final int HD_PRAYER_BAR_PADDING = 1;
-	private static final BufferedImage HD_FRONT_BAR = ImageUtil.getResourceStreamFromClass(PrayerPlugin.class, "front.png");
-	private static final BufferedImage HD_BACK_BAR = ImageUtil.getResourceStreamFromClass(PrayerPlugin.class, "back.png");
+	private static final BufferedImage HD_FRONT_BAR = ImageUtil.loadImageResource(PrayerPlugin.class, "front.png");
+	private static final BufferedImage HD_BACK_BAR = ImageUtil.loadImageResource(PrayerPlugin.class, "back.png");
 
 	private final Client client;
 	private final PrayerConfig config;
@@ -111,12 +110,12 @@ class PrayerBarOverlay extends Overlay
 
 				final int xOffset = (int) (-Math.cos(t) * halfBarWidth) + halfBarWidth;
 
-				graphics.setColor(FLICK_HELP_COLOR);
+				graphics.setColor(config.prayerFlickColor());
 				// Padding is accounted for in the offset calculation
 				graphics.fillRect(barX + xOffset, barY + HD_PRAYER_BAR_PADDING, 1, barHeight - HD_PRAYER_BAR_PADDING * 2);
 			}
 
-			return new Dimension(barWidth, barHeight);
+			return null;
 		}
 
 		// Draw bar
@@ -141,11 +140,11 @@ class PrayerBarOverlay extends Overlay
 
 			final int xOffset = (int) (-Math.cos(t) * barWidth / 2) + barWidth / 2;
 
-			graphics.setColor(FLICK_HELP_COLOR);
+			graphics.setColor(config.prayerFlickColor());
 			graphics.fillRect(barX + xOffset, barY, 1, barHeight);
 		}
 
-		return new Dimension(barWidth, barHeight);
+		return null;
 	}
 
 	void onTick()
@@ -165,7 +164,7 @@ class PrayerBarOverlay extends Overlay
 			return;
 		}
 
-		if (config.hideIfOutOfCombat() && localPlayer.getHealth() == -1)
+		if (config.hideIfOutOfCombat() && localPlayer.getHealthScale() == -1)
 		{
 			showingPrayerBar = false;
 		}

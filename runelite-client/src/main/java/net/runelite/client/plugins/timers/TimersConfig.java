@@ -27,10 +27,13 @@ package net.runelite.client.plugins.timers;
 import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
+import java.time.Instant;
 
-@ConfigGroup("timers")
+@ConfigGroup(TimersConfig.GROUP)
 public interface TimersConfig extends Config
 {
+	String GROUP = "timers";
+
 	@ConfigItem(
 		keyName = "showHomeMinigameTeleports",
 		name = "Teleport cooldown timers",
@@ -44,7 +47,7 @@ public interface TimersConfig extends Config
 	@ConfigItem(
 		keyName = "showAntipoison",
 		name = "Antipoison/Venom timers",
-		description = "Configures whether timers for Antipoision, Antidoe, Antivenom are is displayed"
+		description = "Configures whether timers for poison and venom protection are displayed"
 	)
 	default boolean showAntiPoison()
 	{
@@ -82,11 +85,61 @@ public interface TimersConfig extends Config
 	}
 
 	@ConfigItem(
+		keyName = "showLiquidAdrenaline",
+		name = "Liquid adrenaline timer",
+		description = "Configures whether liquid adrenaline timer is displayed"
+	)
+	default boolean showLiquidAdrenaline()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "showMenaphiteRemedy",
+		name = "Menaphite remedy timer",
+		description = "Configures whether Menaphite remedy timer is displayed"
+	)
+	default boolean showMenaphiteRemedy()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "showSilkDressing",
+		name = "Silk dressing timer",
+		description = "Configures whether silk dressing timer is displayed"
+	)
+	default boolean showSilkDressing()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "showBlessedCrystalScarab",
+		name = "Blessed crystal scarab timer",
+		description = "Configures whether blessed crystal scarab timer is displayed"
+	)
+	default boolean showBlessedCrystalScarab()
+	{
+		return true;
+	}
+
+	@ConfigItem(
 		keyName = "showPrayerEnhance",
 		name = "Prayer enhance timer",
 		description = "Configures whether prayer enhance timer is displayed"
 	)
 	default boolean showPrayerEnhance()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "showDivine",
+		name = "Divine potion timer",
+		description = "Configures whether divine potion timer is displayed"
+	)
+	default boolean showDivine()
 	{
 		return true;
 	}
@@ -152,6 +205,16 @@ public interface TimersConfig extends Config
 	}
 
 	@ConfigItem(
+		keyName = "showHealGroup",
+		name = "Heal Group timer",
+		description = "Configures whether heal group timer is displayed"
+	)
+	default boolean showHealGroup()
+	{
+		return true;
+	}
+
+	@ConfigItem(
 		keyName = "showTeleblock",
 		name = "Teleblock timer",
 		description = "Configures whether teleblock timer is displayed"
@@ -182,6 +245,46 @@ public interface TimersConfig extends Config
 	}
 
 	@ConfigItem(
+		keyName = "showTzhaarTimers",
+		name = "Fight Caves and Inferno timers",
+		description = "Display elapsed time in the Fight Caves and Inferno"
+	)
+	default boolean showTzhaarTimers()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "tzhaarStartTime",
+		name = "",
+		description = "",
+		hidden = true
+	)
+	Instant tzhaarStartTime();
+
+	@ConfigItem(
+		keyName = "tzhaarStartTime",
+		name = "",
+		description = ""
+	)
+	void tzhaarStartTime(Instant tzhaarStartTime);
+
+	@ConfigItem(
+		keyName = "tzhaarLastTime",
+		name = "",
+		description = "",
+		hidden = true
+	)
+	Instant tzhaarLastTime();
+
+	@ConfigItem(
+		keyName = "tzhaarLastTime",
+		name = "",
+		description = ""
+	)
+	void tzhaarLastTime(Instant tzhaarLastTime);
+
+	@ConfigItem(
 		keyName = "showStaffOfTheDead",
 		name = "Staff of the Dead timer",
 		description = "Configures whether staff of the dead timer is displayed"
@@ -207,6 +310,46 @@ public interface TimersConfig extends Config
 		description = "Configures whether the special attack cooldown timer for the Dragonfire Shield is displayed"
 	)
 	default boolean showDFSSpecial()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "showArceuus",
+		name = "Arceuus spells duration",
+		description = "Whether to show Arceuus spellbook spell timers"
+	)
+	default boolean showArceuus()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "showArceuusCooldown",
+		name = "Arceuus spells cooldown",
+		description = "Whether to show cooldown timers for Arceuus spellbook spells"
+	)
+	default boolean showArceuusCooldown()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+		keyName = "showPickpocketStun",
+		name = "Pickpocket stun timer",
+		description = "Configures whether pickpocket stun timer is displayed"
+	)
+	default boolean showPickpocketStun()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "showFarmersAffinity",
+		name = "Farmer's Affinity",
+		description = "Configures whether Farmer's Affinity (Puro-Puro) timer is displayed"
+	)
+	default boolean showFarmersAffinity()
 	{
 		return true;
 	}

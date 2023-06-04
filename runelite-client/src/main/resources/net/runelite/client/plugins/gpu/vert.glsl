@@ -29,9 +29,11 @@
 
 #define FOG_SCENE_EDGE_MIN TILE_SIZE
 #define FOG_SCENE_EDGE_MAX (103 * TILE_SIZE)
+#define FOG_CORNER_ROUNDING 1.5
+#define FOG_CORNER_ROUNDING_SQUARED (FOG_CORNER_ROUNDING * FOG_CORNER_ROUNDING)
 
-layout (location = 0) in ivec4 VertexPosition;
-layout (location = 1) in vec4 uv;
+layout(location = 0) in ivec4 VertexPosition;
+layout(location = 1) in vec4 uv;
 
 layout(std140) uniform uniforms {
   int cameraYaw;
@@ -50,20 +52,20 @@ uniform int useFog;
 uniform int fogDepth;
 uniform int drawDistance;
 
-out ivec3 vPosition;
-out vec4 vColor;
-out float vHsl;
-out vec4 vUv;
-out float vFogAmount;
+out ivec3 gVertex;
+out vec4 gColor;
+out float gHsl;
+out int gTextureId;
+out vec3 gTexPos;
+out float gFogAmount;
 
-#include hsl_to_rgb.glsl
+#include "hsl_to_rgb.glsl"
 
 float fogFactorLinear(const float dist, const float start, const float end) {
   return 1.0 - clamp((dist - start) / (end - start), 0.0, 1.0);
 }
 
-void main()
-{
+void main() {
   ivec3 vertex = VertexPosition.xyz;
   int ahsl = VertexPosition.w;
   int hsl = ahsl & 0xffff;
@@ -71,10 +73,12 @@ void main()
 
   vec3 rgb = hslToRgb(hsl);
 
-  vPosition = vertex;
-  vColor = vec4(rgb, 1.f - a);
-  vHsl = float(hsl);
-  vUv = uv;
+  gVertex = vertex;
+  gColor = vec4(rgb, 1.f - a);
+  gHsl = float(hsl);
+
+  gTextureId = int(uv.x);  // the texture id + 1;
+  gTexPos = uv.yzw;
 
   int fogWest = max(FOG_SCENE_EDGE_MIN, cameraX - drawDistance);
   int fogEast = min(FOG_SCENE_EDGE_MAX, cameraX + drawDistance - TILE_SIZE);
@@ -82,7 +86,13 @@ void main()
   int fogNorth = min(FOG_SCENE_EDGE_MAX, cameraZ + drawDistance - TILE_SIZE);
 
   // Calculate distance from the scene edge
-  float fogDistance = min(min(vertex.x - fogWest, fogEast - vertex.x), min(vertex.z - fogSouth, fogNorth - vertex.z));
+  int xDist = min(vertex.x - fogWest, fogEast - vertex.x);
+  int zDist = min(vertex.z - fogSouth, fogNorth - vertex.z);
+  float nearestEdgeDistance = min(xDist, zDist);
+  float secondNearestEdgeDistance = max(xDist, zDist);
+  float fogDistance =
+      nearestEdgeDistance - FOG_CORNER_ROUNDING * TILE_SIZE *
+                                max(0.f, (nearestEdgeDistance + FOG_CORNER_ROUNDING_SQUARED) / (secondNearestEdgeDistance + FOG_CORNER_ROUNDING_SQUARED));
 
-  vFogAmount = fogFactorLinear(fogDistance, 0, fogDepth * TILE_SIZE) * useFog;
+  gFogAmount = fogFactorLinear(fogDistance, 0, fogDepth * TILE_SIZE) * useFog;
 }

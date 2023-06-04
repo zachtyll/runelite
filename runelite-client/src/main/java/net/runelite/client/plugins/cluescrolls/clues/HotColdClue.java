@@ -26,7 +26,6 @@
 package net.runelite.client.plugins.cluescrolls.clues;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.util.Arrays;
 import java.util.Collection;
@@ -57,9 +56,8 @@ import net.runelite.client.ui.overlay.components.TitleComponent;
 @EqualsAndHashCode(callSuper = false, exclude = { "hotColdSolver", "location" })
 @Getter
 @Slf4j
-public class HotColdClue extends ClueScroll implements LocationClueScroll, LocationsClueScroll, TextClueScroll, NpcClueScroll
+public class HotColdClue extends ClueScroll implements LocationClueScroll, LocationsClueScroll, NpcClueScroll
 {
-	private static final int HOT_COLD_PANEL_WIDTH = 200;
 	private static final HotColdClue BEGINNER_CLUE = new HotColdClue("Buried beneath the ground, who knows where it's found. Lucky for you, A man called Reldo may have a clue.",
 		"Reldo",
 		"Speak to Reldo to receive a strange device.",
@@ -132,7 +130,6 @@ public class HotColdClue extends ClueScroll implements LocationClueScroll, Locat
 		panelComponent.getChildren().add(TitleComponent.builder()
 			.text("Hot/Cold Clue")
 			.build());
-		panelComponent.setPreferredSize(new Dimension(HOT_COLD_PANEL_WIDTH, 0));
 
 		// strange device has not been tested yet, show how to get it
 		if (hotColdSolver.getLastWorldPoint() == null && location == null)
@@ -160,7 +157,7 @@ public class HotColdClue extends ClueScroll implements LocationClueScroll, Locat
 		else
 		{
 			panelComponent.getChildren().add(LineComponent.builder()
-				.left("Possible areas:")
+				.left("Possible locations:")
 				.build());
 
 			final Map<HotColdArea, Integer> locationCounts = new EnumMap<>(HotColdArea.class);
@@ -206,6 +203,14 @@ public class HotColdClue extends ClueScroll implements LocationClueScroll, Locat
 								.left("- " + hotColdLocation.getArea())
 								.leftColor(Color.LIGHT_GRAY)
 								.build());
+
+							if (digLocations.size() <= 5 && hotColdLocation.getEnemy() != null)
+							{
+								panelComponent.getChildren().add(LineComponent.builder()
+									.left(hotColdLocation.getEnemy().getText())
+									.leftColor(Color.YELLOW)
+									.build());
+							}
 						}
 					}
 				}
@@ -272,11 +277,11 @@ public class HotColdClue extends ClueScroll implements LocationClueScroll, Locat
 
 		final Set<HotColdTemperature> temperatureSet;
 
-		if (this.equals(BEGINNER_CLUE))
+		if (this == BEGINNER_CLUE)
 		{
 			temperatureSet = HotColdTemperature.BEGINNER_HOT_COLD_TEMPERATURES;
 		}
-		else if (this.equals(MASTER_CLUE))
+		else if (this == MASTER_CLUE)
 		{
 			temperatureSet = HotColdTemperature.MASTER_HOT_COLD_TEMPERATURES;
 		}
@@ -292,15 +297,16 @@ public class HotColdClue extends ClueScroll implements LocationClueScroll, Locat
 			return false;
 		}
 
-		final WorldPoint localWorld = plugin.getClient().getLocalPlayer().getWorldLocation();
+		// Convert from real to overworld
+		final WorldPoint localWorld = WorldPoint.getMirrorPoint(plugin.getClient().getLocalPlayer().getWorldLocation(), true);
 
 		if (localWorld == null)
 		{
 			return false;
 		}
 
-		if ((this.equals(BEGINNER_CLUE) && temperature == HotColdTemperature.BEGINNER_VISIBLY_SHAKING)
-			|| (this.equals(MASTER_CLUE) && temperature == HotColdTemperature.MASTER_VISIBLY_SHAKING))
+		if ((this == BEGINNER_CLUE && temperature == HotColdTemperature.BEGINNER_VISIBLY_SHAKING)
+			|| (this == MASTER_CLUE && temperature == HotColdTemperature.MASTER_VISIBLY_SHAKING))
 		{
 			markFinalSpot(localWorld);
 		}
@@ -326,11 +332,11 @@ public class HotColdClue extends ClueScroll implements LocationClueScroll, Locat
 	{
 		final boolean isBeginner;
 
-		if (this.equals(BEGINNER_CLUE))
+		if (this == BEGINNER_CLUE)
 		{
 			isBeginner = true;
 		}
-		else if (this.equals(MASTER_CLUE))
+		else if (this == MASTER_CLUE)
 		{
 			isBeginner = false;
 		}
@@ -353,7 +359,8 @@ public class HotColdClue extends ClueScroll implements LocationClueScroll, Locat
 		this.location = wp;
 	}
 
-	public String[] getNpcs()
+	@Override
+	public String[] getNpcs(ClueScrollPlugin plugin)
 	{
 		return new String[] {npc};
 	}

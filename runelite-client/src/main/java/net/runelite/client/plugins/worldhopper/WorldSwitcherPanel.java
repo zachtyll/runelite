@@ -34,6 +34,7 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -63,10 +64,14 @@ class WorldSwitcherPanel extends PluginPanel
 	private WorldOrder orderIndex = WorldOrder.WORLD;
 	private boolean ascendingOrder = true;
 
-	private ArrayList<WorldTableRow> rows = new ArrayList<>();
-	private WorldHopperPlugin plugin;
+	private final ArrayList<WorldTableRow> rows = new ArrayList<>();
+	private final WorldHopperPlugin plugin;
 	@Setter(AccessLevel.PACKAGE)
-	private SubscriptionFilterMode filterMode;
+	private SubscriptionFilterMode subscriptionFilterMode;
+	@Setter(AccessLevel.PACKAGE)
+	private Set<RegionFilterMode> regionFilterMode;
+	@Setter(AccessLevel.PACKAGE)
+	private Set<WorldTypeFilter> worldTypeFilters;
 
 	WorldSwitcherPanel(WorldHopperPlugin plugin)
 	{
@@ -223,15 +228,6 @@ class WorldSwitcherPanel extends PluginPanel
 		}
 	}
 
-	void resetAllFavoriteMenus()
-	{
-		for (WorldTableRow row : rows)
-		{
-			row.setFavoriteMenu(false);
-		}
-
-	}
-
 	void populate(List<World> worlds)
 	{
 		rows.clear();
@@ -240,7 +236,7 @@ class WorldSwitcherPanel extends PluginPanel
 		{
 			World world = worlds.get(i);
 
-			switch (filterMode)
+			switch (subscriptionFilterMode)
 			{
 				case FREE:
 					if (world.getTypes().contains(WorldType.MEMBERS))
@@ -254,6 +250,24 @@ class WorldSwitcherPanel extends PluginPanel
 						continue;
 					}
 					break;
+			}
+
+			if (!regionFilterMode.isEmpty() && !regionFilterMode.contains(RegionFilterMode.of(world.getRegion())))
+			{
+				continue;
+			}
+
+			if (!worldTypeFilters.isEmpty())
+			{
+				boolean matches = false;
+				for (WorldTypeFilter worldTypeFilter : worldTypeFilters)
+				{
+					matches |= worldTypeFilter.matches(world.getTypes());
+				}
+				if (!matches)
+				{
+					continue;
+				}
 			}
 
 			rows.add(buildRow(world, i % 2 == 0, world.getId() == plugin.getCurrentWorld() && plugin.getLastWorld() != 0, plugin.isFavorite(world)));
@@ -378,11 +392,8 @@ class WorldSwitcherPanel extends PluginPanel
 	 */
 	private WorldTableRow buildRow(World world, boolean stripe, boolean current, boolean favorite)
 	{
-		WorldTableRow row = new WorldTableRow(world, current, favorite,
-			world1 ->
-			{
-				plugin.hopTo(world1);
-			},
+		WorldTableRow row = new WorldTableRow(world, current, favorite, plugin.getStoredPing(world),
+			plugin::hopTo,
 			(world12, add) ->
 			{
 				if (add)
