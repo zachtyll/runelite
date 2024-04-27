@@ -56,7 +56,7 @@ public final class JagexColor
 
 	public static String formatHSL(short hsl)
 	{
-		return String.format("%02Xh%Xs%02Xl", unpackHue(hsl), unpackSaturation(hsl), unpackLuminance(hsl));
+		return "%02Xh%Xs%02Xl".formatted(unpackHue(hsl), unpackSaturation(hsl), unpackLuminance(hsl));
 	}
 
 	public static short rgbToHSL(int rgb, double brightness)
