@@ -120,7 +120,7 @@ public class ColorUtil
 	 */
 	public static String colorToHexCode(final Color color)
 	{
-		return String.format("%06x", color.getRGB() & 0xFFFFFF);
+		return "%06x".formatted(color.getRGB() & 0xFFFFFF);
 	}
 
 	/**
@@ -131,7 +131,7 @@ public class ColorUtil
 	 */
 	public static String colorToAlphaHexCode(final Color color)
 	{
-		return String.format("%08x", color.getRGB());
+		return "%08x".formatted(color.getRGB());
 	}
 
 	/**

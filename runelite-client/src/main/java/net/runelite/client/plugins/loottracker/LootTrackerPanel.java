@@ -308,7 +308,7 @@ class LootTrackerPanel extends PluginPanel
 		reset.addActionListener(e ->
 		{
 			final int result = JOptionPane.showOptionDialog(overallPanel,
-				currentView == null ? RESET_ALL_WARNING_TEXT : String.format(RESET_CURRENT_WARNING_TEXT, currentView),
+				currentView == null ? RESET_ALL_WARNING_TEXT : RESET_CURRENT_WARNING_TEXT.formatted(currentView),
 				"Are you sure?", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE,
 				null, new String[]{"Yes", "No"}, "No");
 
@@ -702,6 +702,6 @@ class LootTrackerPanel extends PluginPanel
 	private static String htmlLabel(String key, long value)
 	{
 		final String valueStr = QuantityFormatter.quantityToStackSize(value);
-		return String.format(HTML_LABEL_TEMPLATE, ColorUtil.toHexColor(ColorScheme.LIGHT_GRAY_COLOR), key, valueStr);
+		return HTML_LABEL_TEMPLATE.formatted(ColorUtil.toHexColor(ColorScheme.LIGHT_GRAY_COLOR), key, valueStr);
 	}
 }

@@ -213,7 +213,7 @@ class NameAutocompleter implements KeyListener
 			.findFirst();
 
 		// Search friends if previous searches weren't matched
-		if (!autocompleteName.isPresent())
+		if (autocompleteName.isEmpty())
 		{
 			NameableContainer<Friend> friendContainer = client.getFriendContainer();
 			if (friendContainer != null)
@@ -226,7 +226,7 @@ class NameAutocompleter implements KeyListener
 		}
 
 		// Search friends chat if a friend wasn't found
-		if (!autocompleteName.isPresent())
+		if (autocompleteName.isEmpty())
 		{
 			final FriendsChatManager friendsChatManager = client.getFriendsChatManager();
 			if (friendsChatManager != null)
@@ -239,7 +239,7 @@ class NameAutocompleter implements KeyListener
 		}
 
 		// Search clans
-		if (!autocompleteName.isPresent())
+		if (autocompleteName.isEmpty())
 		{
 			final ClanSettings[] clanSettings = {
 				client.getClanSettings(ClanID.CLAN),
@@ -255,7 +255,7 @@ class NameAutocompleter implements KeyListener
 		}
 
 		// Search cached players if a friend wasn't found
-		if (!autocompleteName.isPresent())
+		if (autocompleteName.isEmpty())
 		{
 			final Player[] cachedPlayers = client.getCachedPlayers();
 			autocompleteName = Arrays.stream(cachedPlayers)

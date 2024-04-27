@@ -188,7 +188,7 @@ public class PuzzleState
 
 		if (!isValidSwap(x1, y1, x2, y2))
 		{
-			throw new IllegalStateException(String.format("Invalid swap: (%1$d, %2$d), (%3$d, %4$d)", x1, y1, x2, y2));
+			throw new IllegalStateException("Invalid swap: (%1$d, %2$d), (%3$d, %4$d)".formatted(x1, y1, x2, y2));
 		}
 
 		PuzzleState newState = new PuzzleState(this);

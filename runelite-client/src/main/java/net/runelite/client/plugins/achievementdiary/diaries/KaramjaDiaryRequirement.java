@@ -38,8 +38,10 @@ public class KaramjaDiaryRequirement extends GenericDiaryRequirement
 	public KaramjaDiaryRequirement()
 	{
 		// EASY
-		add("Use the rope swing to travel to the small island north-west of Karamja, where the " +
-				"moss giants are.",
+		add("""
+				Use the rope swing to travel to the small island north-west of Karamja, where the \
+				moss giants are.\
+				""",
 			new SkillRequirement(Skill.AGILITY, 10));
 		add("Mine some gold from the rocks on the north-west peninsula of Karamja.",
 			new SkillRequirement(Skill.MINING, 40));

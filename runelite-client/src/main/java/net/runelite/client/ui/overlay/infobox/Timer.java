@@ -63,7 +63,7 @@ public class Timer extends InfoBox
 		int minutes = (seconds % 3600) / 60;
 		int secs = seconds % 60;
 
-		return String.format("%d:%02d", minutes, secs);
+		return "%d:%02d".formatted(minutes, secs);
 	}
 
 	@Override

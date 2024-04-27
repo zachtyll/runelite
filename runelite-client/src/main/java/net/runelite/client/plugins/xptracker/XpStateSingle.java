@@ -180,20 +180,20 @@ class XpStateSingle
 			case DAYS:
 				if (durationDays > 1)
 				{
-					return String.format("%d days %02d:%02d:%02d", durationDays, durationHours, durationMinutes, durationSeconds);
+					return "%d days %02d:%02d:%02d".formatted(durationDays, durationHours, durationMinutes, durationSeconds);
 				}
 				else if (durationDays == 1)
 				{
-					return String.format("1 day %02d:%02d:%02d", durationHours, durationMinutes, durationSeconds);
+					return "1 day %02d:%02d:%02d".formatted(durationHours, durationMinutes, durationSeconds);
 				}
 			case HOURS:
 				if (durationHoursTotal > 1)
 				{
-					return String.format("%d hours %02d:%02d", durationHoursTotal, durationMinutes, durationSeconds);
+					return "%d hours %02d:%02d".formatted(durationHoursTotal, durationMinutes, durationSeconds);
 				}
 				else if (durationHoursTotal == 1)
 				{
-					return String.format("1 hour %02d:%02d", durationMinutes, durationSeconds);
+					return "1 hour %02d:%02d".formatted(durationMinutes, durationSeconds);
 				}
 			case SHORT:
 			default:
@@ -201,11 +201,11 @@ class XpStateSingle
 				// return time remaining in hh:mm:ss or mm:ss format where hh can be > 24
 				if (durationHoursTotal > 0)
 				{
-					return String.format("%d:%02d:%02d", durationHoursTotal, durationMinutes, durationSeconds);
+					return "%d:%02d:%02d".formatted(durationHoursTotal, durationMinutes, durationSeconds);
 				}
 
 				// Minutes and seconds will always be present
-				return String.format("%02d:%02d", durationMinutes, durationSeconds);
+				return "%02d:%02d".formatted(durationMinutes, durationSeconds);
 		}
 	}
 

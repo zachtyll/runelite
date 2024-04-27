@@ -159,9 +159,9 @@ public class TelemetryClient
 		telemetry.setOsArch(System.getProperty("os.arch"));
 		telemetry.setLauncherVersion(System.getProperty("runelite.launcher.version"));
 		OperatingSystemMXBean operatingSystemMXBean = ManagementFactory.getOperatingSystemMXBean();
-		if (operatingSystemMXBean instanceof com.sun.management.OperatingSystemMXBean)
+		if (operatingSystemMXBean instanceof com.sun.management.OperatingSystemMXBean bean)
 		{
-			long totalPhysicalMemorySize = ((com.sun.management.OperatingSystemMXBean) operatingSystemMXBean).getTotalPhysicalMemorySize();
+			long totalPhysicalMemorySize = bean.getTotalPhysicalMemorySize();
 			telemetry.setTotalMemory(totalPhysicalMemorySize);
 		}
 		return telemetry;

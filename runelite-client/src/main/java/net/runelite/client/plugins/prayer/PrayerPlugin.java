@@ -341,8 +341,8 @@ public class PrayerPlugin extends Plugin
 
 	private void removeOverheadsIndicators()
 	{
-		infoBoxManager.removeIf(entry -> entry instanceof PrayerCounter
-			&& ((PrayerCounter) entry).getPrayerType().isOverhead());
+		infoBoxManager.removeIf(entry -> entry instanceof PrayerCounter pc
+			&& pc.getPrayerType().isOverhead());
 	}
 
 	private void setPrayerOrbText(String text)
@@ -392,7 +392,7 @@ public class PrayerPlugin extends Plugin
 		if (formatForOrb && (timeLeft.getHour() > 0 || timeLeft.getMinute() > 9))
 		{
 			long minutes = Duration.ofSeconds((long) secondsLeft).toMinutes();
-			return String.format("%dm", minutes);
+			return "%dm".formatted(minutes);
 		}
 		else if (timeLeft.getHour() > 0)
 		{

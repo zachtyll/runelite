@@ -111,9 +111,9 @@ class OpponentInfoOverlay extends OverlayPanel
 			opponentName = Text.removeTags(opponent.getName());
 
 			lastMaxHealth = null;
-			if (opponent instanceof NPC)
+			if (opponent instanceof NPC pC)
 			{
-				NPCComposition composition = ((NPC) opponent).getTransformedComposition();
+				NPCComposition composition = pC.getTransformedComposition();
 				if (composition != null)
 				{
 					String longName = composition.getStringValue(ParamID.NPC_HP_NAME);
@@ -122,7 +122,7 @@ class OpponentInfoOverlay extends OverlayPanel
 						opponentName = longName;
 					}
 				}
-				lastMaxHealth = npcManager.getHealth(((NPC) opponent).getId());
+				lastMaxHealth = npcManager.getHealth(pC.getId());
 			}
 			else if (opponent instanceof Player)
 			{
@@ -226,10 +226,9 @@ class OpponentInfoOverlay extends OverlayPanel
 	private boolean hasHpHud(Actor opponent)
 	{
 		boolean settingEnabled = client.getVarbitValue(Varbits.BOSS_HEALTH_OVERLAY) == 0;
-		if (settingEnabled && opponent instanceof NPC)
+		if (settingEnabled && opponent instanceof NPC npc)
 		{
 			int opponentId = client.getVarpValue(VarPlayer.HP_HUD_NPC_ID);
-			NPC npc = (NPC) opponent;
 			return opponentId != -1 && npc.getComposition() != null && opponentId == npc.getComposition().getId();
 		}
 		return false;

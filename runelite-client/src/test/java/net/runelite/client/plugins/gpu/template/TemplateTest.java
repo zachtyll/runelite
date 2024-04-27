@@ -30,20 +30,23 @@ import org.junit.Test;
 
 public class TemplateTest
 {
-	private static final String FILE1 = "" +
-		"test1\n" +
-		"#include file2\n" +
-		"test3\n";
+	private static final String FILE1 = """
+		test1
+		#include file2
+		test3
+		""";
 
-	private static final String FILE2 = "" +
-		"test4\n" +
-		"test5\n";
+	private static final String FILE2 = """
+		test4
+		test5
+		""";
 
-	private static final String RESULT = "" +
-		"test1\n" +
-		"test4\n" +
-		"test5\n" +
-		"test3\n";
+	private static final String RESULT = """
+		test1
+		test4
+		test5
+		test3
+		""";
 
 	@Test
 	public void testProcess()

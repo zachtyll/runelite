@@ -84,11 +84,15 @@ public class BankTagsPlugin extends Plugin
 	private static final int MAX_RESULT_COUNT = 250;
 
 	private static final String SEARCH_BANK_INPUT_TEXT =
-		"Show items whose names or tags contain the following text:<br>" +
-			"(To show only tagged items, start your search with 'tag:')";
+		"""
+		Show items whose names or tags contain the following text:<br>\
+		(To show only tagged items, start your search with 'tag:')\
+		""";
 	private static final String SEARCH_BANK_INPUT_TEXT_FOUND =
-		"Show items whose names or tags contain the following text: (%d found)<br>" +
-			"(To show only tagged items, start your search with 'tag:')";
+		"""
+		Show items whose names or tags contain the following text: (%d found)<br>\
+		(To show only tagged items, start your search with 'tag:')\
+		""";
 
 	@Inject
 	private ItemManager itemManager;
@@ -281,7 +285,7 @@ public class BankTagsPlugin extends Plugin
 			case "setSearchBankInputTextFound":
 			{
 				int matches = intStack[intStackSize - 1];
-				stringStack[stringStackSize - 1] = String.format(SEARCH_BANK_INPUT_TEXT_FOUND, matches);
+				stringStack[stringStackSize - 1] = SEARCH_BANK_INPUT_TEXT_FOUND.formatted(matches);
 				break;
 			}
 			case "bankSearchFilter":

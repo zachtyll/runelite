@@ -684,16 +684,20 @@ public class ClientUI
 			if (!Strings.isNullOrEmpty(RuneLiteProperties.getLauncherVersion()))
 			{
 				SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(frame,
-					"RuneLite has not yet been updated to work with the latest\n"
-						+ "game update, it will work with reduced functionality until then.",
+					"""
+					RuneLite has not yet been updated to work with the latest
+					game update, it will work with reduced functionality until then.\
+					""",
 					"RuneLite is outdated", INFORMATION_MESSAGE));
 			}
 			else
 			{
 				SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(frame,
-					"RuneLite is outdated and is not compatible with the latest game update.\n"
-						+ "If you are doing pluginhub development, update the runeliteVersion property in build.gradle."
-						+ " Otherwise, git pull and rebuild.",
+					"""
+					RuneLite is outdated and is not compatible with the latest game update.
+					If you are doing pluginhub development, update the runeliteVersion property in build.gradle.\
+					 Otherwise, git pull and rebuild.\
+					""",
 					"RuneLite is outdated", ERROR_MESSAGE));
 			}
 		}
@@ -789,9 +793,9 @@ public class ClientUI
 			return true;
 		}
 
-		if (config.warningOnExit() == WarningOnExit.LOGGED_IN && client instanceof Client)
+		if (config.warningOnExit() == WarningOnExit.LOGGED_IN && client instanceof Client client1)
 		{
-			return ((Client) client).getGameState() != GameState.LOGIN_SCREEN;
+			return client1.getGameState() != GameState.LOGIN_SCREEN;
 		}
 
 		return false;
@@ -811,9 +815,9 @@ public class ClientUI
 				// The client can call System.exit when it's done shutting down
 				// if it doesn't though, we want to exit anyway, so race it
 				int clientShutdownWaitMS;
-				if (client instanceof Client)
+				if (client instanceof Client client1)
 				{
-					((Client) client).stopNow();
+					client1.stopNow();
 					clientShutdownWaitMS = 1000;
 				}
 				else
@@ -993,9 +997,9 @@ public class ClientUI
 	 */
 	public Point getCanvasOffset()
 	{
-		if (client instanceof Client)
+		if (client instanceof Client client1)
 		{
-			final Canvas canvas = ((Client) client).getCanvas();
+			final Canvas canvas = client1.getCanvas();
 			if (canvas != null)
 			{
 				return SwingUtilities.convertPoint(canvas, 0, 0, frame);
@@ -1168,9 +1172,9 @@ public class ClientUI
 
 	private void giveClientFocus()
 	{
-		if (client instanceof Client)
+		if (client instanceof Client client1)
 		{
-			final Canvas c = ((Client) client).getCanvas();
+			final Canvas c = client1.getCanvas();
 			if (c != null)
 			{
 				c.requestFocusInWindow();
@@ -1195,9 +1199,9 @@ public class ClientUI
 			frame.setOpacity(config.windowOpacity() / 100.0f);
 		}
 
-		if (config.usernameInTitle() && (client instanceof Client))
+		if (config.usernameInTitle() && (client instanceof Client client1))
 		{
-			final Player player = ((Client) client).getLocalPlayer();
+			final Player player = client1.getLocalPlayer();
 
 			if (player != null && player.getName() != null)
 			{

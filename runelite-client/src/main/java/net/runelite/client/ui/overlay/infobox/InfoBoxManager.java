@@ -176,9 +176,8 @@ public class InfoBoxManager
 
 		BufferedImage image = infoBox.getImage();
 
-		if (image instanceof AsyncBufferedImage)
+		if (image instanceof AsyncBufferedImage abi)
 		{
-			AsyncBufferedImage abi = (AsyncBufferedImage) image;
 			abi.onLoaded(() -> updateInfoBoxImage(infoBox));
 		}
 	}

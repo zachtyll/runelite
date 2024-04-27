@@ -304,7 +304,7 @@ public class CannonPlugin extends Plugin
 
 			if (!cannonBallNotificationSent && cballsLeft > 0 && config.lowWarningThreshold() >= cballsLeft)
 			{
-				notifier.notify(config.showCannonNotifications(), String.format("Your cannon has %d cannon balls remaining!", cballsLeft));
+				notifier.notify(config.showCannonNotifications(), "Your cannon has %d cannon balls remaining!".formatted(cballsLeft));
 				cannonBallNotificationSent = true;
 			}
 		}

@@ -160,7 +160,7 @@ public class FriendListPlugin extends Plugin
 			if (player != null && player.getWorld() > 0)
 			{
 				messageNode
-					.setValue(messageNode.getValue() + String.format(" (World %d)", player.getWorld()));
+					.setValue(messageNode.getValue() + " (World %d)".formatted(player.getWorld()));
 			}
 		}
 	}

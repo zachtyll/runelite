@@ -241,9 +241,9 @@ public class WSClient extends WebSocketListener implements AutoCloseable
 					return;
 				}
 
-				if (message instanceof PartyMemberMessage)
+				if (message instanceof PartyMemberMessage memberMessage)
 				{
-					((PartyMemberMessage) message).setMemberId(data.getMemberId());
+					memberMessage.setMemberId(data.getMemberId());
 				}
 
 				log.debug("Got: {}", message);

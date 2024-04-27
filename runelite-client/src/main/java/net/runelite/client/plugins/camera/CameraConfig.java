@@ -174,8 +174,10 @@ public interface CameraConfig extends Config
 	@ConfigItem(
 		keyName = "rightClickMenuBlocksCamera",
 		name = "Right click menu blocks camera",
-		description = "Prevents camera movement when 'Right click moves camera' is on and the right click menu<br>" +
-			"is opened due to either 'Right click objects' or 'Right click examine' being on.",
+		description = """
+			Prevents camera movement when 'Right click moves camera' is on and the right click menu<br>\
+			is opened due to either 'Right click objects' or 'Right click examine' being on.\
+			""",
 		position = 10,
 		section = mouseSettingsSection
 	)

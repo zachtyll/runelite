@@ -65,7 +65,7 @@ public class LoopTimer extends InfoBox
 		final int seconds = (int) (progress.toMillis() / 1000L);
 		final int minutes = (seconds % 3600) / 60;
 		final int secs = seconds % 60;
-		return String.format("%d:%02d", minutes, secs);
+		return "%d:%02d".formatted(minutes, secs);
 	}
 
 	@Override

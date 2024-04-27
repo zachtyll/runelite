@@ -33,9 +33,8 @@ class JShadowedLabelUI extends BasicLabelUI
 	@Override
 	protected void paintEnabledText(JLabel l, Graphics g, String s, int textX, int textY)
 	{
-		if (l instanceof JShadowedLabel)
+		if (l instanceof JShadowedLabel ll)
 		{
-			JShadowedLabel ll = (JShadowedLabel) l;
 			g.setColor(ll.getShadow());
 			g.drawString(s, textX + ll.getShadowSize().x, textY + ll.getShadowSize().y);
 		}

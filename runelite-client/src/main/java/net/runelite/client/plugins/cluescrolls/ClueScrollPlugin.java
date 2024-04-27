@@ -297,15 +297,15 @@ public class ClueScrollPlugin extends Plugin
 
 		String message = event.getMessage();
 
-		if (clue instanceof HotColdClue)
+		if (clue instanceof HotColdClue coldClue)
 		{
-			if (((HotColdClue) clue).update(message, this))
+			if (coldClue.update(message, this))
 			{
 				worldMapPointsSet = false;
 			}
 		}
 
-		if (clue instanceof SkillChallengeClue)
+		if (clue instanceof SkillChallengeClue challengeClue)
 		{
 			String text = Text.removeTags(message);
 			if (text.equals("Skill challenge completed.") ||
@@ -313,7 +313,7 @@ public class ClueScrollPlugin extends Plugin
 				text.startsWith("You have completed Charlie's task,") ||
 				text.equals("You have completed this challenge scroll."))
 			{
-				((SkillChallengeClue) clue).setChallengeCompleted(true);
+				challengeClue.setChallengeCompleted(true);
 			}
 		}
 
@@ -353,9 +353,8 @@ public class ClueScrollPlugin extends Plugin
 				updateClue(MapClue.forItemId(clueItemId));
 			}
 		}
-		else if (event.getMenuOption().equals("Search")	&& clue instanceof EmoteClue)
+		else if (event.getMenuOption().equals("Search")	&& clue instanceof EmoteClue emoteClue)
 		{
-			EmoteClue emoteClue = (EmoteClue) clue;
 			if (emoteClue.getStashUnit() != null && emoteClue.getStashUnit().getObjectId() == event.getId())
 			{
 				clickedSTASHClue = emoteClue;
@@ -417,9 +416,9 @@ public class ClueScrollPlugin extends Plugin
 		}
 
 		// if three step clue check for clue scroll pieces
-		if (clue instanceof ThreeStepCrypticClue)
+		if (clue instanceof ThreeStepCrypticClue crypticClue)
 		{
-			if (((ThreeStepCrypticClue) clue).update(event.getContainerId(), itemContainer))
+			if (crypticClue.update(event.getContainerId(), itemContainer))
 			{
 				worldMapPointsSet = false;
 				npcsToMark.clear();
@@ -577,18 +576,18 @@ public class ClueScrollPlugin extends Plugin
 	{
 		objectsToMark.clear();
 
-		if (clue instanceof LocationsClueScroll)
+		if (clue instanceof LocationsClueScroll scroll)
 		{
-			final WorldPoint[] locations = ((LocationsClueScroll) clue).getLocations(this);
+			final WorldPoint[] locations = scroll.getLocations(this);
 
 			if (locations.length > 0)
 			{
 				addMapPoints(locations);
 			}
 
-			if (clue instanceof ObjectClueScroll)
+			if (clue instanceof ObjectClueScroll scroll)
 			{
-				int[] objectIds = ((ObjectClueScroll) clue).getObjectIds();
+				int[] objectIds = scroll.getObjectIds();
 
 				if (objectIds.length > 0)
 				{
@@ -603,9 +602,9 @@ public class ClueScrollPlugin extends Plugin
 			}
 		}
 
-		if (clue instanceof LocationClueScroll)
+		if (clue instanceof LocationClueScroll scroll)
 		{
-			final WorldPoint[] locations = ((LocationClueScroll) clue).getLocations(this);
+			final WorldPoint[] locations = scroll.getLocations(this);
 			final boolean npcHintArrowMarked = client.getHintArrowNpc() != null && npcsToMark.contains(client.getHintArrowNpc());
 
 			if (!npcHintArrowMarked)
@@ -623,9 +622,9 @@ public class ClueScrollPlugin extends Plugin
 
 				addMapPoints(location);
 
-				if (clue instanceof ObjectClueScroll)
+				if (clue instanceof ObjectClueScroll scroll)
 				{
-					int[] objectIds = ((ObjectClueScroll) clue).getObjectIds();
+					int[] objectIds = scroll.getObjectIds();
 
 					if (objectIds.length > 0)
 					{
@@ -746,9 +745,9 @@ public class ClueScrollPlugin extends Plugin
 
 	void resetClue(boolean withItemId)
 	{
-		if (clue instanceof LocationsClueScroll)
+		if (clue instanceof LocationsClueScroll scroll)
 		{
-			((LocationsClueScroll) clue).reset();
+			scroll.reset();
 		}
 
 		if (withItemId)
@@ -1186,9 +1185,8 @@ public class ClueScrollPlugin extends Plugin
 			return false;
 		}
 
-		if (c instanceof EmoteClue)
+		if (c instanceof EmoteClue emote)
 		{
-			EmoteClue emote = (EmoteClue) c;
 
 			for (ItemRequirement ir : emote.getItemRequirements())
 			{
@@ -1202,15 +1200,13 @@ public class ClueScrollPlugin extends Plugin
 		{
 			return itemId == ItemID.SPADE;
 		}
-		else if (c instanceof MapClue)
+		else if (c instanceof MapClue mapClue)
 		{
-			MapClue mapClue = (MapClue) c;
 
 			return mapClue.getObjectId() == -1 && itemId == ItemID.SPADE;
 		}
-		else if (c instanceof SkillChallengeClue)
+		else if (c instanceof SkillChallengeClue challengeClue)
 		{
-			SkillChallengeClue challengeClue = (SkillChallengeClue) c;
 
 			for (ItemRequirement ir : challengeClue.getItemRequirements())
 			{

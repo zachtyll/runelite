@@ -134,7 +134,7 @@ public class InfoPanel extends PluginPanel
 		String engineVer = "Unknown";
 		if (client != null)
 		{
-			engineVer = String.format("Rev %d", client.getRevision());
+			engineVer = "Rev %d".formatted(client.getRevision());
 		}
 
 		revision.setText(htmlLabel("Oldschool revision: ", engineVer));

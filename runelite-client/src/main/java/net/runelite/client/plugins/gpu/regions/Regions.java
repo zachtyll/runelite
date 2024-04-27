@@ -39,15 +39,17 @@ import lombok.Getter;
 
 public class Regions
 {
-	private static final Pattern PATTERN = Pattern.compile("^[ \\t]*(?<expr>" +
-		"//.*$|" + // //comment
-		"n|" +
-		"m[ \\t]*(?<mrx>[0-9]+)[ \\t]+(?<mry>[0-9]+)|" + // m <rx> <ry>
-		"r[ \\t]*(?<rx>[0-9]+)[ \\t]+(?<ry>[0-9]+)|" + // r <rx> <ry>
-		"R[ \\t]*(?<rx1>[0-9]+)[ \\t]+(?<ry1>[0-9]+)[ \\t]+(?<rx2>[0-9]+)[ \\t]+(?<ry2>[0-9]+)|" + // R <rx1> <ry1> <rx2> <ry2>
-		"c[ \\t]*(?<cx>[0-9-]+)[ \\t]+(?<cy>[0-9-]+)|" + // c <cx> <cy>
-		"C[ \\t]*(?<cx1>[0-9-]+)[ \\t]+(?<cy1>[0-9-]+)[ \\t]+(?<cx2>[0-9-]+)[ \\t]+(?<cy2>[0-9-]+)|" + // C <cx1> <cy1> <cx2> <cy2>
-		")[ \\t]*");
+	private static final Pattern PATTERN = Pattern.compile("""
+		^[ \\t]*(?<expr>\
+		//.*$|\
+		n|\
+		m[ \\t]*(?<mrx>[0-9]+)[ \\t]+(?<mry>[0-9]+)|\
+		r[ \\t]*(?<rx>[0-9]+)[ \\t]+(?<ry>[0-9]+)|\
+		R[ \\t]*(?<rx1>[0-9]+)[ \\t]+(?<ry1>[0-9]+)[ \\t]+(?<rx2>[0-9]+)[ \\t]+(?<ry2>[0-9]+)|\
+		c[ \\t]*(?<cx>[0-9-]+)[ \\t]+(?<cy>[0-9-]+)|\
+		C[ \\t]*(?<cx1>[0-9-]+)[ \\t]+(?<cy1>[0-9-]+)[ \\t]+(?<cx2>[0-9-]+)[ \\t]+(?<cy2>[0-9-]+)|\
+		)[ \\t]*\
+		""");
 
 	@Getter(AccessLevel.PACKAGE)
 	private final List<Region> regions = new ArrayList<>();

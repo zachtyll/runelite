@@ -48,7 +48,7 @@ class StatChangeIndicator extends InfoBox
 	@Override
 	public String getText()
 	{
-		return String.format("%02d", plugin.getChangeTime(up ? plugin.getChangeUpTicks() : plugin.getChangeDownTicks()));
+		return "%02d".formatted(plugin.getChangeTime(up ? plugin.getChangeUpTicks() : plugin.getChangeDownTicks()));
 	}
 
 	@Override

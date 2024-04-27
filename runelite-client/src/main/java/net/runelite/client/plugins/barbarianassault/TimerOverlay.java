@@ -66,7 +66,7 @@ class TimerOverlay extends Overlay
 
 		if (config.showTimer() && roleText != null && roleSprite != null)
 		{
-			roleText.setText(String.format("00:%02d", round.getTimeToChange()));
+			roleText.setText("00:%02d".formatted(round.getTimeToChange()));
 			Rectangle spriteBounds = roleSprite.getBounds();
 			roleSprite.setHidden(true);
 			graphics.drawImage(plugin.getClockImage(), spriteBounds.x, spriteBounds.y, null);

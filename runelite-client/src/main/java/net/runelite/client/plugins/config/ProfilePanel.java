@@ -175,8 +175,10 @@ class ProfilePanel extends PluginPanel
 			}
 		});
 
-		JLabel info = new JLabel("<html>"
-			+ "Profiles are separate sets of plugins and settings that you can switch between at any time.");
+		JLabel info = new JLabel("""
+			<html>\
+			Profiles are separate sets of plugins and settings that you can switch between at any time.\
+			""");
 
 		layout.setVerticalGroup(layout.createSequentialGroup()
 			.addComponent(profilesList)
@@ -610,9 +612,9 @@ class ProfilePanel extends PluginPanel
 					{
 						return !target.isEnabled();
 					}
-					if (target instanceof JTextField)
+					if (target instanceof JTextField field)
 					{
-						return !((JTextField) target).isEditable();
+						return !field.isEditable();
 					}
 					return true;
 				}

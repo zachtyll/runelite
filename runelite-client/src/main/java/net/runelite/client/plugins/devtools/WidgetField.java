@@ -64,9 +64,9 @@ public class WidgetField<T>
 		{
 			return value;
 		}
-		if (value instanceof Widget)
+		if (value instanceof Widget widget1)
 		{
-			return WidgetInspector.getWidgetIdentifier((Widget) value);
+			return WidgetInspector.getWidgetIdentifier(widget1);
 		}
 		return MessageFormatter.format("{}", value).getMessage();
 	}

@@ -77,11 +77,11 @@ class DpsOverlay extends OverlayPanel
 		String format;
 		if (s >= 3600)
 		{
-			format = String.format("%d:%02d:%02d", s / 3600, (s % 3600) / 60, (s % 60));
+			format = "%d:%02d:%02d".formatted(s / 3600, (s % 3600) / 60, (s % 60));
 		}
 		else
 		{
-			format = String.format("%d:%02d", s / 60, (s % 60));
+			format = "%d:%02d".formatted(s / 60, (s % 60));
 		}
 		tooltipManager.add(new Tooltip("Elapsed time: " + format));
 	}

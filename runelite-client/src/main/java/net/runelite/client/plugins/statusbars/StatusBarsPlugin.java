@@ -122,7 +122,7 @@ public class StatusBarsPlugin extends Plugin
 		{
 			barsDisplayed = true;
 		}
-		else if ((interacting instanceof NPC && ArrayUtils.contains(((NPC) interacting).getComposition().getActions(), "Attack"))
+		else if ((interacting instanceof NPC pC && ArrayUtils.contains(pC.getComposition().getActions(), "Attack"))
 			|| (interacting instanceof Player && client.getVarbitValue(Varbits.PVP_SPEC_ORB) == 1))
 		{
 			lastCombatActionTickCount = client.getTickCount();

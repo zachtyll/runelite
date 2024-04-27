@@ -72,9 +72,11 @@ class XpInfoBox extends JPanel
 
 	// Templates
 	private static final String HTML_TOOL_TIP_TEMPLATE =
-		"<html>%s %s done<br/>"
-			+ "%s %s/hr<br/>"
-			+ "%s %s</html>";
+		"""
+		<html>%s %s done<br/>\
+		%s %s/hr<br/>\
+		%s %s</html>\
+		""";
 	private static final String HTML_LABEL_TEMPLATE =
 		"<html><body style='color:%s'>%s<span style='color:white'>%s</span></body></html>";
 
@@ -343,6 +345,6 @@ class XpInfoBox extends JPanel
 
 	static String htmlLabel(String key, String valueStr)
 	{
-		return String.format(HTML_LABEL_TEMPLATE, ColorUtil.toHexColor(ColorScheme.LIGHT_GRAY_COLOR), key, valueStr);
+		return HTML_LABEL_TEMPLATE.formatted(ColorUtil.toHexColor(ColorScheme.LIGHT_GRAY_COLOR), key, valueStr);
 	}
 }

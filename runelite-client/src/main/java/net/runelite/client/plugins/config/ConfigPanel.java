@@ -736,39 +736,32 @@ class ConfigPanel extends PluginPanel
 			}
 		}
 
-		if (component instanceof JCheckBox)
+		if (component instanceof JCheckBox checkbox)
 		{
-			JCheckBox checkbox = (JCheckBox) component;
 			configManager.setConfiguration(cd.getGroup().value(), cid.getItem().keyName(), "" + checkbox.isSelected());
 		}
-		else if (component instanceof JSpinner)
+		else if (component instanceof JSpinner spinner)
 		{
-			JSpinner spinner = (JSpinner) component;
 			configManager.setConfiguration(cd.getGroup().value(), cid.getItem().keyName(), "" + spinner.getValue());
 		}
-		else if (component instanceof JTextComponent)
+		else if (component instanceof JTextComponent textField)
 		{
-			JTextComponent textField = (JTextComponent) component;
 			configManager.setConfiguration(cd.getGroup().value(), cid.getItem().keyName(), textField.getText());
 		}
-		else if (component instanceof RuneliteColorPicker)
+		else if (component instanceof RuneliteColorPicker colorPicker)
 		{
-			RuneliteColorPicker colorPicker = (RuneliteColorPicker) component;
 			configManager.setConfiguration(cd.getGroup().value(), cid.getItem().keyName(), colorPicker.getSelectedColor().getRGB() + "");
 		}
-		else if (component instanceof JComboBox)
+		else if (component instanceof JComboBox jComboBox)
 		{
-			JComboBox jComboBox = (JComboBox) component;
 			configManager.setConfiguration(cd.getGroup().value(), cid.getItem().keyName(), ((Enum) jComboBox.getSelectedItem()).name());
 		}
-		else if (component instanceof HotkeyButton)
+		else if (component instanceof HotkeyButton hotkeyButton)
 		{
-			HotkeyButton hotkeyButton = (HotkeyButton) component;
 			configManager.setConfiguration(cd.getGroup().value(), cid.getItem().keyName(), hotkeyButton.getValue());
 		}
-		else if (component instanceof JList)
+		else if (component instanceof JList list)
 		{
-			JList<?> list = (JList<?>) component;
 			List<?> selectedValues = list.getSelectedValuesList();
 
 			configManager.setConfiguration(cd.getGroup().value(), cid.getItem().keyName(), Sets.newHashSet(selectedValues));

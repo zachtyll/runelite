@@ -214,8 +214,8 @@ public class LootTrackerPluginTest
 		{
 			final int id = herb.getKey();
 			final String name = herb.getValue();
-			final String herbMessage = String.format("You put the %s herb into your herb sack.", name);
-			final String herbFullMessage = String.format("Your herb sack is too full to hold the %s herb.", name);
+			final String herbMessage = "You put the %s herb into your herb sack.".formatted(name);
+			final String herbFullMessage = "Your herb sack is too full to hold the %s herb.".formatted(name);
 
 			final ItemPrice herbPrice = new ItemPrice();
 			herbPrice.setId(id);

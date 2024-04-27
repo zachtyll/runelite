@@ -40,8 +40,10 @@ public interface PartyConfig extends Config
 	@ConfigItem(
 		keyName = "pings",
 		name = "Pings",
-		description = "Enables party pings.<br>"
-			+ "To ping, hold the ping hotkey down and click on the tile you want to ping.",
+		description = """
+			Enables party pings.<br>\
+			To ping, hold the ping hotkey down and click on the tile you want to ping.\
+			""",
 		position = 1
 	)
 	default boolean pings()
@@ -74,8 +76,10 @@ public interface PartyConfig extends Config
 	@ConfigItem(
 		keyName = "pingHotkey",
 		name = "Ping hotkey",
-		description = "Key to hold to send a tile ping.<br>"
-			+ "To ping, hold the ping hotkey down and click on the tile you want to ping.",
+		description = """
+			Key to hold to send a tile ping.<br>\
+			To ping, hold the ping hotkey down and click on the tile you want to ping.\
+			""",
 		position = 4
 	)
 	default Keybind pingHotkey()

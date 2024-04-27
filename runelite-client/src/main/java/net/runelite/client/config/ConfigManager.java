@@ -1152,9 +1152,9 @@ public class ConfigManager
 			int height = Integer.parseInt(splitStr[3]);
 			return new Rectangle(x, y, width, height);
 		}
-		if (type instanceof Class && ((Class<?>) type).isEnum())
+		if (type instanceof Class class1 && class1.isEnum())
 		{
-			return Enum.valueOf((Class<? extends Enum>) type, str);
+			return Enum.valueOf(class1, str);
 		}
 		if (type == Instant.class)
 		{
@@ -1187,17 +1187,15 @@ public class ConfigManager
 		{
 			return Base64.getUrlDecoder().decode(str);
 		}
-		if (type instanceof ParameterizedType)
+		if (type instanceof ParameterizedType parameterizedType)
 		{
-			ParameterizedType parameterizedType = (ParameterizedType) type;
 			if (parameterizedType.getRawType() == Set.class)
 			{
 				return gson.fromJson(str, parameterizedType);
 			}
 		}
-		if (type instanceof Class)
+		if (type instanceof Class clazz)
 		{
-			Class<?> clazz = (Class<?>) type;
 			ConfigSerializer configSerializer = clazz.getAnnotation(ConfigSerializer.class);
 			if (configSerializer != null)
 			{
@@ -1222,50 +1220,45 @@ public class ConfigManager
 	@Nullable
 	String objectToString(Object object)
 	{
-		if (object instanceof Color)
+		if (object instanceof Color color)
 		{
-			return String.valueOf(((Color) object).getRGB());
+			return String.valueOf(color.getRGB());
 		}
-		if (object instanceof Enum)
+		if (object instanceof Enum enum1)
 		{
-			return ((Enum) object).name();
+			return enum1.name();
 		}
-		if (object instanceof Dimension)
+		if (object instanceof Dimension d)
 		{
-			Dimension d = (Dimension) object;
 			return d.width + "x" + d.height;
 		}
-		if (object instanceof Point)
+		if (object instanceof Point p)
 		{
-			Point p = (Point) object;
 			return p.x + ":" + p.y;
 		}
-		if (object instanceof Rectangle)
+		if (object instanceof Rectangle r)
 		{
-			Rectangle r = (Rectangle) object;
 			return r.x + ":" + r.y + ":" + r.width + ":" + r.height;
 		}
-		if (object instanceof Instant)
+		if (object instanceof Instant instant)
 		{
-			return ((Instant) object).toString();
+			return instant.toString();
 		}
-		if (object instanceof Keybind)
+		if (object instanceof Keybind k)
 		{
-			Keybind k = (Keybind) object;
 			return k.getKeyCode() + ":" + k.getModifiers();
 		}
-		if (object instanceof WorldPoint)
+		if (object instanceof WorldPoint wp)
 		{
-			WorldPoint wp = (WorldPoint) object;
 			return wp.getX() + ":" + wp.getY() + ":" + wp.getPlane();
 		}
-		if (object instanceof Duration)
+		if (object instanceof Duration duration)
 		{
-			return Long.toString(((Duration) object).toMillis());
+			return Long.toString(duration.toMillis());
 		}
-		if (object instanceof byte[])
+		if (object instanceof byte[] bytes)
 		{
-			return Base64.getUrlEncoder().encodeToString((byte[]) object);
+			return Base64.getUrlEncoder().encodeToString(bytes);
 		}
 		if (object instanceof Set)
 		{

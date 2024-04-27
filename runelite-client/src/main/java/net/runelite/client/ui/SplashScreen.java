@@ -223,7 +223,7 @@ public class SplashScreen extends JFrame implements ActionListener
 		{
 			final double MiB = 1024 * 1024;
 			final double CEIL = 1.d / 10.d;
-			progress = String.format("%.1f / %.1f MiB", done / MiB, (total / MiB) + CEIL);
+			progress = "%.1f / %.1f MiB".formatted(done / MiB, (total / MiB) + CEIL);
 		}
 		else
 		{

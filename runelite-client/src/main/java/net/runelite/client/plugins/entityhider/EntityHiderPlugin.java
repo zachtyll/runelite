@@ -176,9 +176,8 @@ public class EntityHiderPlugin extends Plugin
 	@VisibleForTesting
 	boolean shouldDraw(Renderable renderable, boolean drawingUI)
 	{
-		if (renderable instanceof Player)
+		if (renderable instanceof Player player)
 		{
-			Player player = (Player) renderable;
 			Player local = client.getLocalPlayer();
 
 			if (player.getName() == null)
@@ -218,9 +217,8 @@ public class EntityHiderPlugin extends Plugin
 
 			return !(drawingUI ? hideOthers2D : hideOthers);
 		}
-		else if (renderable instanceof NPC)
+		else if (renderable instanceof NPC npc)
 		{
-			NPC npc = (NPC) renderable;
 
 			if (npc.getComposition().isFollower() && npc != client.getFollower())
 			{
@@ -261,14 +259,14 @@ public class EntityHiderPlugin extends Plugin
 		{
 			return !hideProjectiles;
 		}
-		else if (renderable instanceof GraphicsObject)
+		else if (renderable instanceof GraphicsObject object)
 		{
 			if (!hideDeadNpcs)
 			{
 				return true;
 			}
 
-			switch (((GraphicsObject) renderable).getId())
+			switch (object.getId())
 			{
 				case GraphicID.MELEE_NYLO_DEATH:
 				case GraphicID.RANGE_NYLO_DEATH:

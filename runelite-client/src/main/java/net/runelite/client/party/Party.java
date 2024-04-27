@@ -265,8 +265,9 @@ package net.runelite.client.party;
               "memberId_",
             };
             java.lang.String info =
-                "\u0000\u0002\u0000\u0000\u0001\u0002\u0002\u0000\u0000\u0000\u0001\u0002\u0002\u0002" +
-                "";
+                """
+                      \
+                """;
             return newMessageInfo(DEFAULT_INSTANCE, info, objects);
         }
         // fall through
@@ -801,8 +802,10 @@ package net.runelite.client.party;
               "type_",
             };
             java.lang.String info =
-                "\u0000\u0002\u0000\u0000\u0001\u0002\u0002\u0000\u0000\u0000\u0001\n\u0002\u0208" +
-                "";
+                """
+                      
+                Ȉ\
+                """;
             return newMessageInfo(DEFAULT_INSTANCE, info, objects);
         }
         // fall through
@@ -1375,8 +1378,10 @@ package net.runelite.client.party;
               net.runelite.client.party.Party.Data.class,
             };
             java.lang.String info =
-                "\u0000\u0003\u0001\u0000\u0001\u0003\u0003\u0000\u0000\u0000\u0001<\u0000\u0002<" +
-                "\u0000\u0003<\u0000";
+                """
+                     < <\
+                 < \
+                """;
             return newMessageInfo(DEFAULT_INSTANCE, info, objects);
         }
         // fall through
@@ -1688,8 +1693,9 @@ package net.runelite.client.party;
               "memberId_",
             };
             java.lang.String info =
-                "\u0000\u0002\u0000\u0000\u0001\u0002\u0002\u0000\u0000\u0000\u0001\u0002\u0002\u0002" +
-                "";
+                """
+                      \
+                """;
             return newMessageInfo(DEFAULT_INSTANCE, info, objects);
         }
         // fall through
@@ -1993,8 +1999,9 @@ package net.runelite.client.party;
               "memberId_",
             };
             java.lang.String info =
-                "\u0000\u0002\u0000\u0000\u0001\u0002\u0002\u0000\u0000\u0000\u0001\u0002\u0002\u0002" +
-                "";
+                """
+                      \
+                """;
             return newMessageInfo(DEFAULT_INSTANCE, info, objects);
         }
         // fall through
@@ -2471,8 +2478,11 @@ package net.runelite.client.party;
               "type_",
             };
             java.lang.String info =
-                "\u0000\u0004\u0000\u0000\u0001\u0004\u0004\u0000\u0000\u0000\u0001\u0002\u0002\u0002" +
-                "\u0003\n\u0004\u0208";
+                """
+                      \
+                
+                Ȉ\
+                """;
             return newMessageInfo(DEFAULT_INSTANCE, info, objects);
         }
         // fall through
@@ -3045,8 +3055,10 @@ package net.runelite.client.party;
               net.runelite.client.party.Party.PartyData.class,
             };
             java.lang.String info =
-                "\u0000\u0003\u0001\u0000\u0001\u0003\u0003\u0000\u0000\u0000\u0001<\u0000\u0002<" +
-                "\u0000\u0003<\u0000";
+                """
+                     < <\
+                 < \
+                """;
             return newMessageInfo(DEFAULT_INSTANCE, info, objects);
         }
         // fall through

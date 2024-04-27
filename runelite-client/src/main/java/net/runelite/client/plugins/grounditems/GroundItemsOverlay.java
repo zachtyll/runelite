@@ -349,11 +349,11 @@ public class GroundItemsOverlay extends Overlay
 					final String timerText;
 					if (groundItemTimers == DespawnTimerMode.SECONDS)
 					{
-						timerText = String.format(" - %.1f", despawnTimeMillis / 1000f);
+						timerText = " - %.1f".formatted(despawnTimeMillis / 1000f);
 					}
 					else // TICKS
 					{
-						timerText = String.format(" - %d", despawnTimeMillis / 600);
+						timerText = " - %d".formatted(despawnTimeMillis / 600);
 					}
 
 					// The timer text is drawn separately to have its own color, and is intentionally not included

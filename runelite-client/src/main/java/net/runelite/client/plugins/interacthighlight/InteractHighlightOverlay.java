@@ -135,13 +135,13 @@ class InteractHighlightOverlay extends Overlay
 		}
 
 		Actor target = plugin.getInteractedTarget();
-		if (target instanceof NPC && config.npcShowInteract())
+		if (target instanceof NPC pC && config.npcShowInteract())
 		{
 			Color startColor = plugin.isAttacked() ? config.npcAttackHoverHighlightColor() : config.npcHoverHighlightColor();
 			Color endColor = plugin.isAttacked() ? config.npcAttackHighlightColor() : config.npcInteractHighlightColor();
 			Color clickColor = getClickColor(startColor, endColor,
 				client.getGameCycle() - plugin.getGameCycle());
-			modelOutlineRenderer.drawOutline((NPC) target, config.borderWidth(), clickColor, config.outlineFeather());
+			modelOutlineRenderer.drawOutline(pC, config.borderWidth(), clickColor, config.outlineFeather());
 		}
 	}
 

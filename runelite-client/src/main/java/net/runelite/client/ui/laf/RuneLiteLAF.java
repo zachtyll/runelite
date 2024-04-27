@@ -99,7 +99,7 @@ public class RuneLiteLAF extends FlatDarkLaf
 				}
 
 				Color color = (Color) f.get(null);
-				extras.put("@" + name, String.format("#%06x%02x", color.getRGB() & 0xFFFFFF, color.getRGB() >>> 24));
+				extras.put("@" + name, "#%06x%02x".formatted(color.getRGB() & 0xFFFFFF, color.getRGB() >>> 24));
 			}
 		}
 

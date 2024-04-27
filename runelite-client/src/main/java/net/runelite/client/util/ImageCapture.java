@@ -217,7 +217,7 @@ public class ImageCapture
 		int i = 1;
 		while (screenshotFile.exists())
 		{
-			screenshotFile = new File(playerFolder, fileName + String.format("(%d)", i++) + ".png");
+			screenshotFile = new File(playerFolder, fileName + "(%d)".formatted(i++) + ".png");
 		}
 
 		try

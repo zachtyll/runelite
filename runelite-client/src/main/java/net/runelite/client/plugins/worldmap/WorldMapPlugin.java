@@ -584,6 +584,6 @@ public class WorldMapPlugin extends Plugin
 
 	private static Predicate<WorldMapPoint> isType(MapPoint.Type type)
 	{
-		return w -> w instanceof MapPoint && ((MapPoint) w).getType() == type;
+		return w -> w instanceof MapPoint mp && mp.getType() == type;
 	}
 }

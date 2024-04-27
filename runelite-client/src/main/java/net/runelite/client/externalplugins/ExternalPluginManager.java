@@ -433,9 +433,8 @@ public class ExternalPluginManager
 	public static PluginHubManifest.JarData getJarData(Class<? extends Plugin> plugin)
 	{
 		ClassLoader cl = plugin.getClassLoader();
-		if (cl instanceof PluginHubClassLoader)
+		if (cl instanceof PluginHubClassLoader ecl)
 		{
-			PluginHubClassLoader ecl = (PluginHubClassLoader) cl;
 			return ecl.getJarData();
 		}
 		return null;
@@ -445,9 +444,8 @@ public class ExternalPluginManager
 	public static PluginHubManifest.DisplayData getDisplayData(Class<? extends Plugin> plugin)
 	{
 		ClassLoader cl = plugin.getClassLoader();
-		if (cl instanceof PluginHubClassLoader)
+		if (cl instanceof PluginHubClassLoader ecl)
 		{
-			PluginHubClassLoader ecl = (PluginHubClassLoader) cl;
 			return ecl.getStub();
 		}
 		return null;

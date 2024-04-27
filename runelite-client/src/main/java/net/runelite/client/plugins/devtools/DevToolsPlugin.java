@@ -208,9 +208,8 @@ public class DevToolsPlugin extends Plugin
 
 	private AWTEventListener swingInspectorKeyListener = rawEv ->
 	{
-		if (rawEv instanceof KeyEvent)
+		if (rawEv instanceof KeyEvent kev)
 		{
-			KeyEvent kev = (KeyEvent) rawEv;
 			if (kev.getID() == KeyEvent.KEY_PRESSED)
 			{
 				swingInspectorHotkeyListener.keyPressed(kev);
@@ -500,12 +499,12 @@ public class DevToolsPlugin extends Plugin
 				if (value.isEmpty())
 				{
 					configManager.unsetConfiguration(group, key);
-					message = String.format("Unset configuration %s.%s (was: %s)", group, key, current);
+					message = "Unset configuration %s.%s (was: %s)".formatted(group, key, current);
 				}
 				else
 				{
 					configManager.setConfiguration(group, key, value);
-					message = String.format("Set configuration %s.%s to %s (was: %s)", group, key, value, current);
+					message = "Set configuration %s.%s to %s (was: %s)".formatted(group, key, value, current);
 				}
 				chatMessageManager.queue(QueuedMessage.builder()
 					.type(ChatMessageType.GAMEMESSAGE)
@@ -517,7 +516,7 @@ public class DevToolsPlugin extends Plugin
 			{
 				String group = args[0], key = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
 				String value = configManager.getConfiguration(group, key);
-				final String message = String.format("%s.%s = %s", group, key, value);
+				final String message = "%s.%s = %s".formatted(group, key, value);
 				chatMessageManager.queue(QueuedMessage.builder()
 					.type(ChatMessageType.GAMEMESSAGE)
 					.runeLiteFormattedMessage(new ChatMessageBuilder().append(message).build())

@@ -264,7 +264,7 @@ public class DriftNetPlugin extends Plugin
 		{
 			Actor target = client.getLocalPlayer().getInteracting();
 
-			if (target instanceof NPC && ((NPC) target).getId() == NpcID.FISH_SHOAL)
+			if (target instanceof NPC pC && pC.getId() == NpcID.FISH_SHOAL)
 			{
 				tagFish(target);
 			}

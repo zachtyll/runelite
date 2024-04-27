@@ -261,7 +261,7 @@ abstract class ClockPanel extends JPanel
 		long mins = (duration / 60) % 60;
 		long seconds = duration % 60;
 
-		return String.format("%02d:%02d:%02d", hours, mins, seconds);
+		return "%02d:%02d:%02d".formatted(hours, mins, seconds);
 	}
 
 	static long stringToSeconds(String time) throws NumberFormatException, DateTimeParseException

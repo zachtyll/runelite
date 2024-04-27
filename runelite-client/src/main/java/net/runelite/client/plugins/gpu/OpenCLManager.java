@@ -655,7 +655,7 @@ class OpenCLManager
 	{
 		if (errcode != CL_SUCCESS)
 		{
-			throw new RuntimeException(String.format("OpenCL error [%d]", errcode));
+			throw new RuntimeException("OpenCL error [%d]".formatted(errcode));
 		}
 	}
 }

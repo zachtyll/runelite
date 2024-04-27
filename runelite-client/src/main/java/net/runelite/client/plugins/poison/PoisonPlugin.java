@@ -277,7 +277,7 @@ public class PoisonPlugin extends Plugin
 		int minutes = seconds / 60;
 		int secs = seconds % 60;
 
-		return String.format("%d:%02d", minutes, secs);
+		return "%d:%02d".formatted(minutes, secs);
 	}
 
 	String createTooltip()

@@ -260,7 +260,7 @@ public class SpecialCounterPlugin extends Plugin
 			}
 
 			Actor target = client.getLocalPlayer().getInteracting();
-			lastSpecTarget = target instanceof NPC ? (NPC) target : null;
+			lastSpecTarget = target instanceof NPC npc ? npc : null;
 			hitsplatTick = serverTicks + getHitDelay(specialWeapon, target);
 			log.debug("Special attack used - percent: {} weapon: {} server cycle {} hitsplat cycle {}", specialPercentage, specialWeapon, serverTicks, hitsplatTick);
 		});

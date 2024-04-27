@@ -257,9 +257,8 @@ public class GrandExchangeOfferSlot extends JPanel
 			 * the tooltips on the children instead. */
 			for (Component c : container.getComponents())
 			{
-				if (c instanceof JPanel)
+				if (c instanceof JPanel panel)
 				{
-					JPanel panel = (JPanel) c;
 					panel.setToolTipText(htmlTooltip(((int) progressBar.getPercentage()) + "%"));
 					panel.setComponentPopupMenu(popupMenu);
 				}

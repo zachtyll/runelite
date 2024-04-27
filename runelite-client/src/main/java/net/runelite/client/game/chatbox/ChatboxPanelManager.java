@@ -107,17 +107,17 @@ public class ChatboxPanelManager
 		client.runScript(ScriptID.MESSAGE_LAYER_OPEN, 0);
 
 		eventBus.register(input);
-		if (input instanceof KeyListener)
+		if (input instanceof KeyListener listener)
 		{
-			keyManager.registerKeyListener((KeyListener) input);
+			keyManager.registerKeyListener(listener);
 		}
-		if (input instanceof MouseListener)
+		if (input instanceof MouseListener listener)
 		{
-			mouseManager.registerMouseListener((MouseListener) input);
+			mouseManager.registerMouseListener(listener);
 		}
-		if (input instanceof MouseWheelListener)
+		if (input instanceof MouseWheelListener listener)
 		{
-			mouseManager.registerMouseWheelListener((MouseWheelListener) input);
+			mouseManager.registerMouseWheelListener(listener);
 		}
 
 		if (currentInput != null)
@@ -183,17 +183,17 @@ public class ChatboxPanelManager
 		}
 
 		eventBus.unregister(currentInput);
-		if (currentInput instanceof KeyListener)
+		if (currentInput instanceof KeyListener listener)
 		{
-			keyManager.unregisterKeyListener((KeyListener) currentInput);
+			keyManager.unregisterKeyListener(listener);
 		}
-		if (currentInput instanceof MouseListener)
+		if (currentInput instanceof MouseListener listener)
 		{
-			mouseManager.unregisterMouseListener((MouseListener) currentInput);
+			mouseManager.unregisterMouseListener(listener);
 		}
-		if (currentInput instanceof MouseWheelListener)
+		if (currentInput instanceof MouseWheelListener listener)
 		{
-			mouseManager.unregisterMouseWheelListener((MouseWheelListener) currentInput);
+			mouseManager.unregisterMouseWheelListener(listener);
 		}
 		currentInput = null;
 	}

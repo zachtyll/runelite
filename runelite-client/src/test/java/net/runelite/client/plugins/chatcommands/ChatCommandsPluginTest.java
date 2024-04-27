@@ -224,9 +224,11 @@ public class ChatCommandsPluginTest
 		when(client.getVarbitValue(Varbits.THEATRE_OF_BLOOD_ORB2)).thenReturn(15);
 
 		ChatMessage chatMessage = new ChatMessage(null, GAMEMESSAGE, "",
-			"Wave 'The Final Challenge' (Normal Mode) complete!<br>" +
-				"Duration: <col=ff0000>2:42.0</col><br>" +
-				"Theatre of Blood completion time: <col=ff0000>17:00.20</col> (new personal best)", null, 0);
+			"""
+			Wave 'The Final Challenge' (Normal Mode) complete!<br>\
+			Duration: <col=ff0000>2:42.0</col><br>\
+			Theatre of Blood completion time: <col=ff0000>17:00.20</col> (new personal best)\
+			""", null, 0);
 		chatCommandsPlugin.onChatMessage(chatMessage);
 
 		chatMessage = new ChatMessage(null, GAMEMESSAGE, "", "Theatre of Blood total completion time: <col=ff0000>24:40.20</col>. Personal best: 20:45.00", null, 0);
@@ -246,9 +248,11 @@ public class ChatCommandsPluginTest
 		when(client.getVarbitValue(Varbits.THEATRE_OF_BLOOD_ORB1)).thenReturn(1);
 
 		ChatMessage chatMessage = new ChatMessage(null, GAMEMESSAGE, "",
-			"Wave 'The Final Challenge' (Normal Mode) complete!<br>" +
-				"Duration: <col=ff0000>2:42</col><br>" +
-				"Theatre of Blood completion time: <col=ff0000>17:00</col>. Personal best: 13:52.80", null, 0);
+			"""
+			Wave 'The Final Challenge' (Normal Mode) complete!<br>\
+			Duration: <col=ff0000>2:42</col><br>\
+			Theatre of Blood completion time: <col=ff0000>17:00</col>. Personal best: 13:52.80\
+			""", null, 0);
 		chatCommandsPlugin.onChatMessage(chatMessage);
 
 		chatMessage = new ChatMessage(null, GAMEMESSAGE, "", "Theatre of Blood total completion time: <col=ff0000>24:40.20</col>. Personal best: 20:45.00", null, 0);
@@ -268,9 +272,11 @@ public class ChatCommandsPluginTest
 		when(client.getVarbitValue(Varbits.THEATRE_OF_BLOOD_ORB1)).thenReturn(1);
 
 		ChatMessage chatMessage = new ChatMessage(null, GAMEMESSAGE, "",
-			"Wave 'The Final Challenge' (Entry Mode) complete!<br>" +
-				"Duration: <col=ff0000>2:42</col><br>" +
-				"Theatre of Blood completion time: <col=ff0000>17:00</col> (new personal best)", null, 0);
+			"""
+			Wave 'The Final Challenge' (Entry Mode) complete!<br>\
+			Duration: <col=ff0000>2:42</col><br>\
+			Theatre of Blood completion time: <col=ff0000>17:00</col> (new personal best)\
+			""", null, 0);
 		chatCommandsPlugin.onChatMessage(chatMessage);
 
 		chatMessage = new ChatMessage(null, GAMEMESSAGE, "", "Theatre of Blood total completion time: <col=ff0000>24:40.20</col>. Personal best: 20:45.00", null, 0);

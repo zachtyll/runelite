@@ -65,18 +65,20 @@ class Skybox
 
 	private static final int PLANE_ALL = 0b1111;
 
-	private static final Pattern PATTERN = Pattern.compile("^[ \\t]*(?<expr>" +
-		"//.*$|" + // //comment
-		"m[ \\t]*(?<mrx>[0-9]+)[ \\t]+(?<mry>[0-9]+)|" + // m <rx> <ry>
-		"r[ \\t]*(?<rx>[0-9]+)[ \\t]+(?<ry>[0-9]+)|" + // r <rx> <ry>
-		"R[ \\t]*(?<rx1>[0-9]+)[ \\t]+(?<ry1>[0-9]+)[ \\t]+(?<rx2>[0-9]+)[ \\t]+(?<ry2>[0-9]+)|" + // R <rx1> <ry1> <rx2> <ry2>
-		"c[ \\t]*(?<cx>[0-9-]+)[ \\t]+(?<cy>[0-9-]+)|" + // c <cx> <cy>
-		"C[ \\t]*(?<cx1>[0-9-]+)[ \\t]+(?<cy1>[0-9-]+)[ \\t]+(?<cx2>[0-9-]+)[ \\t]+(?<cy2>[0-9-]+)|" + // C <cx1> <cy1> <cx2> <cy2>
-		"#[ \\t]*(?<color>[0-9a-fA-F]{6}|[0-9a-fA-F]{3})|" + // #<RRGGBB> or #<RGB>
-		"p[ \\t]*(?<plane>all|0?[ \\t]*1?[ \\t]*2?[ \\t]*3?)|" + // p all or p<1><2><3><4>
-		"b[ \\t]*(?<blend>[0-9]+)|" + // b <blend>
-		"bounds[ \\t]+(?<bx1>[0-9]+)[ \\t]+(?<by1>[0-9]+)[ \\t]+(?<bx2>[0-9]+)[ \\t]+(?<by2>[0-9]+)" + // bounds <x0> <y0> <x1> <y1>
-		")[ \\t]*");
+	private static final Pattern PATTERN = Pattern.compile("""
+		^[ \\t]*(?<expr>\
+		//.*$|\
+		m[ \\t]*(?<mrx>[0-9]+)[ \\t]+(?<mry>[0-9]+)|\
+		r[ \\t]*(?<rx>[0-9]+)[ \\t]+(?<ry>[0-9]+)|\
+		R[ \\t]*(?<rx1>[0-9]+)[ \\t]+(?<ry1>[0-9]+)[ \\t]+(?<rx2>[0-9]+)[ \\t]+(?<ry2>[0-9]+)|\
+		c[ \\t]*(?<cx>[0-9-]+)[ \\t]+(?<cy>[0-9-]+)|\
+		C[ \\t]*(?<cx1>[0-9-]+)[ \\t]+(?<cy1>[0-9-]+)[ \\t]+(?<cx2>[0-9-]+)[ \\t]+(?<cy2>[0-9-]+)|\
+		#[ \\t]*(?<color>[0-9a-fA-F]{6}|[0-9a-fA-F]{3})|\
+		p[ \\t]*(?<plane>all|0?[ \\t]*1?[ \\t]*2?[ \\t]*3?)|\
+		b[ \\t]*(?<blend>[0-9]+)|\
+		bounds[ \\t]+(?<bx1>[0-9]+)[ \\t]+(?<by1>[0-9]+)[ \\t]+(?<bx2>[0-9]+)[ \\t]+(?<by2>[0-9]+)\
+		)[ \\t]*\
+		""");
 
 	private final int[] chunks;
 	private final int[] planeOverrides;

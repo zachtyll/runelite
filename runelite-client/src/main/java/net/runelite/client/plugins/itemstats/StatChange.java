@@ -82,6 +82,6 @@ public class StatChange
 
 	static String formatBoost(int boost)
 	{
-		return String.format("%+d", boost);
+		return "%+d".formatted(boost);
 	}
 }

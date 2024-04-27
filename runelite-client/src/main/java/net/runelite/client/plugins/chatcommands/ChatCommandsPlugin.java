@@ -117,8 +117,10 @@ public class ChatCommandsPlugin extends Plugin
 	private static final Pattern DUEL_ARENA_LOSSES_PATTERN = Pattern.compile("You have(?: now)? lost ([\\d,]+|one) duels?");
 	private static final Pattern ADVENTURE_LOG_TITLE_PATTERN = Pattern.compile("The Exploits of (.+)");
 	private static final Pattern ADVENTURE_LOG_PB_PATTERN = Pattern.compile("Fastest (?:kill|run|Room time)(?: - \\(Team size: \\(?" + TEAM_SIZES + "\\)\\)?)?: (?<time>[0-9:]+(?:\\.[0-9]+)?)");
-	private static final Pattern HS_PB_PATTERN = Pattern.compile("Floor (?<floor>\\d) time: <col=ff0000>(?<floortime>[0-9:]+(?:\\.[0-9]+)?)</col>(?: \\(new personal best\\)|. Personal best: (?<floorpb>[0-9:]+(?:\\.[0-9]+)?))" +
-		"(?:<br>Overall time: <col=ff0000>(?<otime>[0-9:]+(?:\\.[0-9]+)?)</col>(?: \\(new personal best\\)|. Personal best: (?<opb>[0-9:]+(?:\\.[0-9]+)?)))?");
+	private static final Pattern HS_PB_PATTERN = Pattern.compile("""
+		Floor (?<floor>\\d) time: <col=ff0000>(?<floortime>[0-9:]+(?:\\.[0-9]+)?)</col>(?: \\(new personal best\\)|. Personal best: (?<floorpb>[0-9:]+(?:\\.[0-9]+)?))\
+		(?:<br>Overall time: <col=ff0000>(?<otime>[0-9:]+(?:\\.[0-9]+)?)</col>(?: \\(new personal best\\)|. Personal best: (?<opb>[0-9:]+(?:\\.[0-9]+)?)))?\
+		""");
 	private static final Pattern HS_KC_FLOOR_PATTERN = Pattern.compile("You have completed Floor (\\d) of the Hallowed Sepulchre! Total completions: <col=ff0000>([0-9,]+)</col>\\.");
 	private static final Pattern HS_KC_GHC_PATTERN = Pattern.compile("You have opened the Grand Hallowed Coffin <col=ff0000>([0-9,]+)</col> times?!");
 	private static final Pattern COLLECTION_LOG_ITEM_PATTERN = Pattern.compile("New item added to your collection log: (.*)");
@@ -641,11 +643,11 @@ public class ChatCommandsPlugin extends Plugin
 		int minutes = (int) (Math.floor(seconds / 60) % 60);
 		seconds = seconds % 60;
 
-		String timeString = hours > 0 ? String.format("%d:%02d:", hours, minutes) : String.format("%d:", minutes);
+		String timeString = hours > 0 ? "%d:%02d:".formatted(hours, minutes) : "%d:".formatted(minutes);
 
 		// If the seconds is an integer, it is ambiguous if the pb is a precise
 		// pb or not. So we always show it without the trailing .00.
-		return timeString + (Math.floor(seconds) == seconds ? String.format("%02d", (int) seconds) : String.format("%05.2f", seconds));
+		return timeString + (Math.floor(seconds) == seconds ? "%02d".formatted((int) seconds) : "%05.2f".formatted(seconds));
 	}
 
 	private void matchPb(Matcher matcher)
@@ -951,7 +953,7 @@ public class ChatCommandsPlugin extends Plugin
 			.append(ChatColorType.NORMAL)
 			.append(" kill count: ")
 			.append(ChatColorType.HIGHLIGHT)
-			.append(String.format("%,d", kc))
+			.append("%,d".formatted(kc))
 			.build();
 
 		log.debug("Setting response {}", response);
@@ -1032,15 +1034,15 @@ public class ChatCommandsPlugin extends Plugin
 			.append(ChatColorType.NORMAL)
 			.append("Duel Arena wins: ")
 			.append(ChatColorType.HIGHLIGHT)
-			.append(String.format("%,d", wins))
+			.append("%,d".formatted(wins))
 			.append(ChatColorType.NORMAL)
 			.append("   losses: ")
 			.append(ChatColorType.HIGHLIGHT)
-			.append(String.format("%,d", losses))
+			.append("%,d".formatted(losses))
 			.append(ChatColorType.NORMAL)
 			.append("   streak: ")
 			.append(ChatColorType.HIGHLIGHT)
-			.append(String.format("%,d", winningStreak != 0 ? winningStreak : -losingStreak))
+			.append("%,d".formatted(winningStreak != 0 ? winningStreak : -losingStreak))
 			.build();
 
 		log.debug("Setting response {}", response);
@@ -1235,7 +1237,7 @@ public class ChatCommandsPlugin extends Plugin
 			.append(ChatColorType.NORMAL)
 			.append("Barbarian Assault High-level gambles: ")
 			.append(ChatColorType.HIGHLIGHT)
-			.append(String.format("%,d", gc))
+			.append("%,d".formatted(gc))
 			.build();
 
 		log.debug("Setting response {}", response);
@@ -1677,7 +1679,7 @@ public class ChatCommandsPlugin extends Plugin
 				.append(minigame.getName())
 				.append(" Score: ")
 				.append(ChatColorType.HIGHLIGHT)
-				.append(String.format("%,d", score));
+				.append("%,d".formatted(score));
 
 			int rank = hiscoreSkill.getRank();
 			if (rank != -1)
@@ -1685,7 +1687,7 @@ public class ChatCommandsPlugin extends Plugin
 				chatMessageBuilder.append(ChatColorType.NORMAL)
 					.append(" Rank: ")
 					.append(ChatColorType.HIGHLIGHT)
-					.append(String.format("%,d", rank));
+					.append("%,d".formatted(rank));
 			}
 
 			String response = chatMessageBuilder.build();
@@ -1771,14 +1773,14 @@ public class ChatCommandsPlugin extends Plugin
 				.append(ChatColorType.NORMAL)
 				.append("Clue scroll (" + level + ")").append(": ")
 				.append(ChatColorType.HIGHLIGHT)
-				.append(String.format("%,d", quantity));
+				.append("%,d".formatted(quantity));
 
 			if (rank != -1)
 			{
 				chatMessageBuilder.append(ChatColorType.NORMAL)
 					.append(" Rank: ")
 					.append(ChatColorType.HIGHLIGHT)
-					.append(String.format("%,d", rank));
+					.append("%,d".formatted(rank));
 			}
 
 			String response = chatMessageBuilder.build();

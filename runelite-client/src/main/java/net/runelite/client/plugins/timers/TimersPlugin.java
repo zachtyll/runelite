@@ -1173,7 +1173,7 @@ public class TimersPlugin extends Plugin
 	{
 		if (actorDeath.getActor() == client.getLocalPlayer())
 		{
-			infoBoxManager.removeIf(t -> t instanceof TimerTimer && ((TimerTimer) t).getTimer().isRemovedOnDeath());
+			infoBoxManager.removeIf(t -> t instanceof TimerTimer tt && tt.getTimer().isRemovedOnDeath());
 		}
 	}
 
@@ -1208,7 +1208,7 @@ public class TimersPlugin extends Plugin
 	@VisibleForTesting
 	void removeGameTimer(GameTimer timer)
 	{
-		infoBoxManager.removeIf(t -> t instanceof TimerTimer && ((TimerTimer) t).getTimer() == timer);
+		infoBoxManager.removeIf(t -> t instanceof TimerTimer tt && tt.getTimer() == timer);
 	}
 
 	private IndicatorIndicator createGameIndicator(GameIndicator gameIndicator)
@@ -1233,7 +1233,7 @@ public class TimersPlugin extends Plugin
 
 	private void removeGameIndicator(GameIndicator indicator)
 	{
-		infoBoxManager.removeIf(t -> t instanceof IndicatorIndicator && ((IndicatorIndicator) t).getIndicator() == indicator);
+		infoBoxManager.removeIf(t -> t instanceof IndicatorIndicator ii && ii.getIndicator() == indicator);
 	}
 
 	private void updateVarTimer(final GameTimer gameTimer, final int varValue, final IntUnaryOperator tickDuration)

@@ -111,9 +111,9 @@ public class ClientLoader implements Supplier<Applet>
 			client = doLoad();
 		}
 
-		if (client instanceof Throwable)
+		if (client instanceof Throwable throwable)
 		{
-			throw new RuntimeException((Throwable) client);
+			throw new RuntimeException(throwable);
 		}
 		return (Applet) client;
 	}
@@ -451,8 +451,10 @@ public class ClientLoader implements Supplier<Applet>
 			if (is == null)
 			{
 				SwingUtilities.invokeLater(() ->
-					new FatalErrorDialog("The client-patch is missing from the classpath. If you are building " +
-						"the client you need to re-run maven")
+					new FatalErrorDialog("""
+						The client-patch is missing from the classpath. If you are building \
+						the client you need to re-run maven\
+						""")
 						.addHelpButtons()
 						.addBuildingGuide()
 						.open());
@@ -576,9 +578,9 @@ public class ClientLoader implements Supplier<Applet>
 		Applet rs = (Applet) clientClass.newInstance();
 		rs.setStub(new RSAppletStub(config, runtimeConfigLoader));
 
-		if (rs instanceof Client)
+		if (rs instanceof Client client1)
 		{
-			log.info("client-patch {}", ((Client) rs).getBuildID());
+			log.info("client-patch {}", client1.getBuildID());
 		}
 
 		return rs;

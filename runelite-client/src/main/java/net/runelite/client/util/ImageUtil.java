@@ -66,9 +66,9 @@ public class ImageUtil
 	 */
 	public static BufferedImage bufferedImageFromImage(final Image image)
 	{
-		if (image instanceof BufferedImage)
+		if (image instanceof BufferedImage bufferedImage)
 		{
-			return (BufferedImage) image;
+			return bufferedImage;
 		}
 
 		return toARGB(image);
@@ -79,9 +79,9 @@ public class ImageUtil
 	 */
 	public static BufferedImage toARGB(final Image image)
 	{
-		if (image instanceof BufferedImage && ((BufferedImage) image).getType() == BufferedImage.TYPE_INT_ARGB)
+		if (image instanceof BufferedImage bufferedImage && bufferedImage.getType() == BufferedImage.TYPE_INT_ARGB)
 		{
-			return (BufferedImage) image;
+			return bufferedImage;
 		}
 
 		BufferedImage out = new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_INT_ARGB);

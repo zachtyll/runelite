@@ -272,7 +272,7 @@ public class XpTrackerPlugin extends Plugin
 	 */
 	void removeOverlay(Skill skill)
 	{
-		overlayManager.removeIf(e -> e instanceof XpInfoBoxOverlay && ((XpInfoBoxOverlay) e).getSkill() == skill);
+		overlayManager.removeIf(e -> e instanceof XpInfoBoxOverlay xibo && xibo.getSkill() == skill);
 	}
 
 	/**
@@ -283,7 +283,7 @@ public class XpTrackerPlugin extends Plugin
 	 */
 	boolean hasOverlay(final Skill skill)
 	{
-		return overlayManager.anyMatch(o -> o instanceof XpInfoBoxOverlay && ((XpInfoBoxOverlay) o).getSkill() == skill);
+		return overlayManager.anyMatch(o -> o instanceof XpInfoBoxOverlay xibo && xibo.getSkill() == skill);
 	}
 
 	/**
@@ -399,10 +399,9 @@ public class XpTrackerPlugin extends Plugin
 		state.setActionType(XpActionType.EXPERIENCE);
 
 		final Actor interacting = client.getLocalPlayer().getInteracting();
-		if (interacting instanceof NPC && COMBAT.contains(skill))
+		if (interacting instanceof NPC npc && COMBAT.contains(skill))
 		{
 			final int xpModifier = worldSetToType(client.getWorldType()).modifier(client);
-			final NPC npc = (NPC) interacting;
 			xpState.updateNpcExperience(skill, npc, npcManager.getHealth(npc.getId()), xpModifier);
 		}
 

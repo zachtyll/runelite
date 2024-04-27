@@ -63,7 +63,7 @@ class PyramidPlunderTimer extends Timer
 	{
 		int floor = client.getVarbitValue(Varbits.PYRAMID_PLUNDER_ROOM);
 		int thievingLevel = client.getVarbitValue(Varbits.PYRAMID_PLUNDER_THIEVING_LEVEL);
-		return String.format("Time remaining. Floor: %d. Thieving level: %d", floor, thievingLevel);
+		return "Time remaining. Floor: %d. Thieving level: %d".formatted(floor, thievingLevel);
 	}
 
 	@Override

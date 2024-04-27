@@ -89,12 +89,14 @@ import net.runelite.client.ui.overlay.OverlayManager;
 public class MiningPlugin extends Plugin
 {
 	private static final Pattern MINING_PATTERN = Pattern.compile(
-		"You " +
-			"(?:manage to|just)" +
-			" (?:mined?|quarry) " +
-			"(?:some|an?) " +
-			"(?:copper|tin|clay|iron|silver|coal|gold|mithril|adamantite|runite|amethyst|sandstone|granite|barronite shards|barronite deposit|Opal|piece of Jade|Red Topaz|Emerald|Sapphire|Ruby|Diamond)" +
-			"(?:\\.|!)");
+		"""
+		You \
+		(?:manage to|just)\
+		 (?:mined?|quarry) \
+		(?:some|an?) \
+		(?:copper|tin|clay|iron|silver|coal|gold|mithril|adamantite|runite|amethyst|sandstone|granite|barronite shards|barronite deposit|Opal|piece of Jade|Red Topaz|Emerald|Sapphire|Ruby|Diamond)\
+		(?:\\.|!)\
+		""");
 
 	@Inject
 	private Client client;

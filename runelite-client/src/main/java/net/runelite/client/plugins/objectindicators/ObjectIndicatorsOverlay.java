@@ -160,23 +160,23 @@ class ObjectIndicatorsOverlay extends Overlay
 		final Shape polygon;
 		Shape polygon2 = null;
 
-		if (object instanceof GameObject)
+		if (object instanceof GameObject gameObject)
 		{
-			polygon = ((GameObject) object).getConvexHull();
+			polygon = gameObject.getConvexHull();
 		}
-		else if (object instanceof WallObject)
+		else if (object instanceof WallObject wallObject)
 		{
-			polygon = ((WallObject) object).getConvexHull();
-			polygon2 = ((WallObject) object).getConvexHull2();
+			polygon = wallObject.getConvexHull();
+			polygon2 = wallObject.getConvexHull2();
 		}
-		else if (object instanceof DecorativeObject)
+		else if (object instanceof DecorativeObject decorativeObject)
 		{
-			polygon = ((DecorativeObject) object).getConvexHull();
-			polygon2 = ((DecorativeObject) object).getConvexHull2();
+			polygon = decorativeObject.getConvexHull();
+			polygon2 = decorativeObject.getConvexHull2();
 		}
-		else if (object instanceof GroundObject)
+		else if (object instanceof GroundObject groundObject)
 		{
-			polygon = ((GroundObject) object).getConvexHull();
+			polygon = groundObject.getConvexHull();
 		}
 		else
 		{

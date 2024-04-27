@@ -105,9 +105,9 @@ public class TooltipOverlay extends Overlay
 			if (tooltip.getComponent() != null)
 			{
 				entity = tooltip.getComponent();
-				if (entity instanceof PanelComponent)
+				if (entity instanceof PanelComponent component)
 				{
-					((PanelComponent) entity).setBackgroundColor(runeLiteConfig.overlayBackgroundColor());
+					component.setBackgroundColor(runeLiteConfig.overlayBackgroundColor());
 				}
 			}
 			else

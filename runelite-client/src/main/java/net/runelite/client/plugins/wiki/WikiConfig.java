@@ -45,8 +45,10 @@ public interface WikiConfig extends Config
 	@ConfigItem(
 		keyName = "showWikiMinimapButton",
 		name = "Show wiki button under minimap",
-		description = "Shows the wiki lookup button under the minimap.<br>"
-			+ "Overrides 'Show Wiki entity lookup' in the RuneScape settings.",
+		description = """
+			Shows the wiki lookup button under the minimap.<br>\
+			Overrides 'Show Wiki entity lookup' in the RuneScape settings.\
+			""",
 		position = 2
 	)
 	default boolean showWikiMinimapButton()

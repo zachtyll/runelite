@@ -69,9 +69,9 @@ public class SwingUtil
 			Component ic = c.getComponent(i);
 
 			// removeAll and removeNotify are both recursive, so we have to recurse before them
-			if (ic instanceof Container)
+			if (ic instanceof Container container)
 			{
-				fastRemoveAll((Container) ic);
+				fastRemoveAll(container);
 			}
 
 			// each removeNotify needs to remove anything from the event queue that is for that widget
@@ -105,11 +105,11 @@ public class SwingUtil
 
 	public static void activate(@Nullable Object maybeActivatable)
 	{
-		if (maybeActivatable instanceof Activatable)
+		if (maybeActivatable instanceof Activatable activatable)
 		{
 			try
 			{
-				((Activatable) maybeActivatable).onActivate();
+				activatable.onActivate();
 			}
 			catch (Exception e)
 			{
@@ -120,11 +120,11 @@ public class SwingUtil
 
 	public static void deactivate(@Nullable Object maybeActivatable)
 	{
-		if (maybeActivatable instanceof Activatable)
+		if (maybeActivatable instanceof Activatable activatable)
 		{
 			try
 			{
-				((Activatable) maybeActivatable).onDeactivate();
+				activatable.onDeactivate();
 			}
 			catch (Exception e)
 			{

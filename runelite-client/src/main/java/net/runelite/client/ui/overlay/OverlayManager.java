@@ -179,9 +179,9 @@ public class OverlayManager
 
 		// WidgetItemOverlays have a reference to the overlay manager in order to get the WidgetItems
 		// for each frame.
-		if (overlay instanceof WidgetItemOverlay)
+		if (overlay instanceof WidgetItemOverlay itemOverlay)
 		{
-			((WidgetItemOverlay) overlay).setOverlayManager(this);
+			itemOverlay.setOverlayManager(this);
 		}
 
 		rebuildOverlayLayers();
@@ -350,10 +350,10 @@ public class OverlayManager
 
 	private void updateOverlayConfig(final Overlay overlay)
 	{
-		if (overlay instanceof OverlayPanel)
+		if (overlay instanceof OverlayPanel panel)
 		{
 			// Update preferred color for overlay panels based on configuration
-			((OverlayPanel) overlay).setPreferredColor(runeLiteConfig.overlayBackgroundColor());
+			panel.setPreferredColor(runeLiteConfig.overlayBackgroundColor());
 		}
 	}
 

@@ -36,9 +36,9 @@ public final class TitleCaseListCellRenderer extends DefaultListCellRenderer
 	public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus)
 	{
 		String text;
-		if (value instanceof Enum<?>)
+		if (value instanceof Enum<?> enum1)
 		{
-			text = Text.titleCase((Enum<?>) value);
+			text = Text.titleCase(enum1);
 		}
 		else
 		{

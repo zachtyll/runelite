@@ -98,7 +98,7 @@ public class RangeStatChange extends StatChange
 
 		final StringBuilder sb = new StringBuilder();
 
-		sb.append(String.format("%+d", changeA));
+		sb.append("%+d".formatted(changeA));
 		sb.append('~');
 
 		// If they share a operator, strip b's duplicate
@@ -109,7 +109,7 @@ public class RangeStatChange extends StatChange
 		}
 		else
 		{
-			sb.append(String.format("%+d", changeB));
+			sb.append("%+d".formatted(changeB));
 		}
 
 		return sb.toString();

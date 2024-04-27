@@ -427,7 +427,7 @@ public class RuneLite
 
 			if (file.exists() && (!file.isFile() || !file.canWrite()))
 			{
-				throw new ValueConversionException(String.format("File %s is not accessible", file.getAbsolutePath()));
+				throw new ValueConversionException("File %s is not accessible".formatted(file.getAbsolutePath()));
 			}
 
 			return file;
@@ -606,11 +606,11 @@ public class RuneLite
 				CertificateException exception = null;
 				for (TrustManager trustManager : trustManagers)
 				{
-					if (trustManager instanceof X509TrustManager)
+					if (trustManager instanceof X509TrustManager manager)
 					{
 						try
 						{
-							((X509TrustManager) trustManager).checkClientTrusted(chain, authType);
+							manager.checkClientTrusted(chain, authType);
 							// accept if any of the trust managers accept the certificate
 							return;
 						}
@@ -635,11 +635,11 @@ public class RuneLite
 				CertificateException exception = null;
 				for (TrustManager trustManager : trustManagers)
 				{
-					if (trustManager instanceof X509TrustManager)
+					if (trustManager instanceof X509TrustManager manager)
 					{
 						try
 						{
-							((X509TrustManager) trustManager).checkServerTrusted(chain, authType);
+							manager.checkServerTrusted(chain, authType);
 							// accept if any of the trust managers accept the certificate
 							return;
 						}
@@ -664,9 +664,9 @@ public class RuneLite
 				List<X509Certificate> certificates = new ArrayList<>();
 				for (TrustManager trustManager : trustManagers)
 				{
-					if (trustManager instanceof X509TrustManager)
+					if (trustManager instanceof X509TrustManager manager)
 					{
-						certificates.addAll(Arrays.asList(((X509TrustManager) trustManager).getAcceptedIssuers()));
+						certificates.addAll(Arrays.asList(manager.getAcceptedIssuers()));
 					}
 				}
 				return certificates.toArray(new X509Certificate[0]);

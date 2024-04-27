@@ -100,9 +100,9 @@ class InventoryInspector extends DevToolsFrame
 			}
 
 			final Object node = e.getNewLeadSelectionPath().getLastPathComponent();
-			if (node instanceof InventoryLogNode)
+			if (node instanceof InventoryLogNode logNode)
 			{
-				clientThread.invoke(() -> displayItemSnapshot((InventoryLogNode) node));
+				clientThread.invoke(() -> displayItemSnapshot(logNode));
 			}
 		});
 		tree.setModel(new DefaultTreeModel(trackerRootNode));
@@ -241,9 +241,8 @@ class InventoryInspector extends DevToolsFrame
 		if (treeNode.getIndex(logNode) > 0)
 		{
 			final TreeNode prevNode = treeNode.getChildBefore(logNode);
-			if (prevNode instanceof InventoryLogNode)
+			if (prevNode instanceof InventoryLogNode prevLogNode)
 			{
-				final InventoryLogNode prevLogNode = (InventoryLogNode) prevNode;
 				deltas = compareItemSnapshots(prevLogNode.getLog().getItems(), curItems);
 			}
 		}

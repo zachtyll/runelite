@@ -35,8 +35,10 @@ public interface FpsConfig extends Config
 	@ConfigItem(
 		keyName = "limitFps",
 		name = "Limit Global FPS",
-		description = "Global FPS limit in effect regardless of<br>" +
-			"whether window is in focus or not",
+		description = """
+			Global FPS limit in effect regardless of<br>\
+			whether window is in focus or not\
+			""",
 		position = 1
 	)
 	default boolean limitFps()

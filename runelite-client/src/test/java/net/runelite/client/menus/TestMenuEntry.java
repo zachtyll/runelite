@@ -219,14 +219,14 @@ public class TestMenuEntry implements MenuEntry
 	@Override
 	public NPC getNpc()
 	{
-		return actor instanceof NPC ? (NPC) actor : null;
+		return actor instanceof NPC npc ? npc : null;
 	}
 
 	@Nullable
 	@Override
 	public Player getPlayer()
 	{
-		return actor instanceof Player ? (Player) actor : null;
+		return actor instanceof Player p ? p : null;
 	}
 
 	@Nullable

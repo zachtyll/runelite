@@ -186,8 +186,8 @@ public class KingdomPlugin extends Plugin
 		int estimatedApproval = estimateApproval(lastChanged, lastApproval);
 		if (estimatedCoffer < config.getCofferThreshold() || getApprovalPercent(estimatedApproval) < config.getApprovalThreshold())
 		{
-			sendChatMessage(String.format(
-				CHAT_MESSAGE_FORMAT,
+			sendChatMessage(
+				CHAT_MESSAGE_FORMAT.formatted(
 				getApprovalPercent(estimatedApproval),
 				QuantityFormatter.quantityToStackSize(estimatedCoffer)));
 		}

@@ -247,7 +247,7 @@ public class FriendNotesPlugin extends Plugin
 					final String note = getFriendNote(sanitizedTarget);
 
 					// Open the new chatbox input dialog
-					chatboxPanelManager.openTextInput(String.format(NOTE_PROMPT_FORMAT, sanitizedTarget, CHARACTER_LIMIT))
+					chatboxPanelManager.openTextInput(NOTE_PROMPT_FORMAT.formatted(sanitizedTarget, CHARACTER_LIMIT))
 						.value(Strings.nullToEmpty(note))
 						.onDone((content) ->
 						{

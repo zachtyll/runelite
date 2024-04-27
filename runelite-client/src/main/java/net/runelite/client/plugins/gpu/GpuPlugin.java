@@ -144,10 +144,12 @@ public class GpuPlugin extends Plugin implements DrawCallbacks
 	private GLCapabilities glCapabilities;
 
 	static final String LINUX_VERSION_HEADER =
-		"#version 420\n" +
-			"#extension GL_ARB_compute_shader : require\n" +
-			"#extension GL_ARB_shader_storage_buffer_object : require\n" +
-			"#extension GL_ARB_explicit_attrib_location : require\n";
+		"""
+		#version 420
+		#extension GL_ARB_compute_shader : require
+		#extension GL_ARB_shader_storage_buffer_object : require
+		#extension GL_ARB_explicit_attrib_location : require
+		""";
 	static final String WINDOWS_VERSION_HEADER = "#version 430\n";
 
 	static final Shader PROGRAM = new Shader()
@@ -1700,9 +1702,9 @@ public class GpuPlugin extends Plugin implements DrawCallbacks
 	public void draw(Renderable renderable, int orientation, int pitchSin, int pitchCos, int yawSin, int yawCos, int x, int y, int z, long hash)
 	{
 		Model model, offsetModel;
-		if (renderable instanceof Model)
+		if (renderable instanceof Model model1)
 		{
-			model = (Model) renderable;
+			model = model1;
 			offsetModel = model.getUnskewedModel();
 			if (offsetModel == null)
 			{

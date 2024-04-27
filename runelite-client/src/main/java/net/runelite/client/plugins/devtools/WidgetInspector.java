@@ -137,9 +137,8 @@ class WidgetInspector extends DevToolsFrame
 		widgetTree.getSelectionModel().addTreeSelectionListener(e ->
 		{
 			Object selected = widgetTree.getLastSelectedPathComponent();
-			if (selected instanceof WidgetTreeNode)
+			if (selected instanceof WidgetTreeNode node)
 			{
-				WidgetTreeNode node = (WidgetTreeNode) selected;
 				Widget widget = node.getWidget();
 				setSelectedWidget(widget, false);
 			}

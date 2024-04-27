@@ -293,9 +293,8 @@ public class ScreenshotPlugin extends Plugin
 	public void onActorDeath(ActorDeath actorDeath)
 	{
 		Actor actor = actorDeath.getActor();
-		if (actor instanceof Player)
+		if (actor instanceof Player player)
 		{
-			Player player = (Player) actor;
 			if (player == client.getLocalPlayer() && config.screenshotPlayerDeath())
 			{
 				takeScreenshot("Death", SD_DEATHS);
@@ -815,7 +814,7 @@ public class ScreenshotPlugin extends Plugin
 		if (highGambleMatch.find())
 		{
 			String gambleCount = highGambleMatch.group("gambleCount");
-			return String.format("High Gamble(%s)", gambleCount);
+			return "High Gamble(%s)".formatted(gambleCount);
 		}
 
 		return "High Gamble(count not found)";
