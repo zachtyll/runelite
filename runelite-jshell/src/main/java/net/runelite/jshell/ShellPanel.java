@@ -334,9 +334,9 @@ public abstract class ShellPanel extends JPanel
 							throw new RuntimeException("prelude error: " + msg);
 						}
 					}
-					if (snip instanceof DeclarationSnippet)
+					if (snip instanceof DeclarationSnippet snippet)
 					{
-						var unresolved = shell.unresolvedDependencies((DeclarationSnippet) snip).collect(Collectors.toList());
+						var unresolved = shell.unresolvedDependencies(snippet).collect(Collectors.toList());
 						for (var ident : unresolved)
 						{
 							handled = true;

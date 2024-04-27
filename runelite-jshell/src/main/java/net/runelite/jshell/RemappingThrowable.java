@@ -123,9 +123,9 @@ class RemappingThrowable extends Throwable
 	public String toString()
 	{
 		String className;
-		if (wrapped instanceof EvalException)
+		if (wrapped instanceof EvalException exception)
 		{
-			className = ((EvalException) wrapped).getExceptionClassName();
+			className = exception.getExceptionClassName();
 		}
 		else
 		{
