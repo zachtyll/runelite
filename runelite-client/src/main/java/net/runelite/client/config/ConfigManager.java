@@ -1196,7 +1196,7 @@ public class ConfigManager
 		}
 		if (type instanceof Class clazz)
 		{
-			ConfigSerializer configSerializer = clazz.getAnnotation(ConfigSerializer.class);
+			ConfigSerializer configSerializer = (ConfigSerializer) clazz.getAnnotation(ConfigSerializer.class);
 			if (configSerializer != null)
 			{
 				Class<? extends Serializer<?>> serializerClass = configSerializer.value();

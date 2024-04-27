@@ -576,9 +576,9 @@ public class ClueScrollPlugin extends Plugin
 	{
 		objectsToMark.clear();
 
-		if (clue instanceof LocationsClueScroll scroll)
+		if (clue instanceof LocationsClueScroll scrollLocations)
 		{
-			final WorldPoint[] locations = scroll.getLocations(this);
+			final WorldPoint[] locations = scrollLocations.getLocations(this);
 
 			if (locations.length > 0)
 			{
@@ -602,9 +602,9 @@ public class ClueScrollPlugin extends Plugin
 			}
 		}
 
-		if (clue instanceof LocationClueScroll scroll)
+		if (clue instanceof LocationClueScroll scrollLocation)
 		{
-			final WorldPoint[] locations = scroll.getLocations(this);
+			final WorldPoint[] locations = scrollLocation.getLocations(this);
 			final boolean npcHintArrowMarked = client.getHintArrowNpc() != null && npcsToMark.contains(client.getHintArrowNpc());
 
 			if (!npcHintArrowMarked)

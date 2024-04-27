@@ -54,11 +54,6 @@ public final class JagexColor
 		return hsl & LUMINANCE_MAX;
 	}
 
-	public static String formatHSL(short hsl)
-	{
-		return "%02Xh%Xs%02Xl".formatted(unpackHue(hsl), unpackSaturation(hsl), unpackLuminance(hsl));
-	}
-
 	public static short rgbToHSL(int rgb, double brightness)
 	{
 		if (rgb == 1)
