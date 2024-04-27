@@ -32,6 +32,8 @@ import java.util.List;
 import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import net.runelite.api.annotations.Component;
+import net.runelite.api.annotations.Interface;
 import net.runelite.api.annotations.VarCInt;
 import net.runelite.api.annotations.VarCStr;
 import net.runelite.api.annotations.Varbit;
@@ -50,6 +52,7 @@ import net.runelite.api.widgets.ItemQuantityMode;
 import net.runelite.api.widgets.Widget;
 import net.runelite.api.widgets.WidgetConfig;
 import net.runelite.api.widgets.WidgetInfo;
+import net.runelite.api.widgets.WidgetModalMode;
 import net.runelite.api.worldmap.MapElementConfig;
 import net.runelite.api.worldmap.WorldMap;
 import org.intellij.lang.annotations.MagicConstant;
@@ -244,6 +247,13 @@ public interface Client extends OAuthApi, GameEngine
 	int getCameraX();
 
 	/**
+	 * Floating point camera position, x-axis
+	 * @see #getCameraX()
+	 * @return
+	 */
+	double getCameraFpX();
+
+	/**
 	 * Gets the y-axis coordinate of the camera.
 	 * <p>
 	 * This value is a local coordinate value similar to
@@ -252,6 +262,13 @@ public interface Client extends OAuthApi, GameEngine
 	 * @return the camera y coordinate
 	 */
 	int getCameraY();
+
+	/**
+	 * Floating point camera position, y-axis
+	 * @see #getCameraY()
+	 * @return
+	 */
+	double getCameraFpY();
 
 	/**
 	 * Gets the z-axis coordinate of the camera.
@@ -264,7 +281,14 @@ public interface Client extends OAuthApi, GameEngine
 	int getCameraZ();
 
 	/**
-	 * Gets the actual pitch of the camera.
+	 * Floating point camera position, z-axis
+	 * @see #getCameraZ()
+	 * @return
+	 */
+	double getCameraFpZ();
+
+	/**
+	 * Gets the pitch of the camera.
 	 * <p>
 	 * The value returned by this method is measured in JAU, or Jagex
 	 * Angle Unit, which is 1/1024 of a revolution.
@@ -274,11 +298,25 @@ public interface Client extends OAuthApi, GameEngine
 	int getCameraPitch();
 
 	/**
+	 * Floating point camera pitch.
+	 * @see #getCameraPitch()
+	 * @return
+	 */
+	double getCameraFpPitch();
+
+	/**
 	 * Gets the yaw of the camera.
 	 *
 	 * @return the camera yaw
 	 */
 	int getCameraYaw();
+
+	/**
+	 * Floating point camera yaw
+	 * @see #getCameraYaw()
+	 * @return
+	 */
+	double getCameraFpYaw();
 
 	/**
 	 * Gets the current world number of the logged in player.
@@ -520,7 +558,7 @@ public interface Client extends OAuthApi, GameEngine
 	/**
 	 * Gets the widget that is being dragged on.
 	 * <p>
-	 * The widget being dragged has the {@link net.runelite.api.widgets.WidgetConfig#DRAG_ON}
+	 * The widget being dragged has the {@link net.runelite.api.widgets.WidgetConfig#DRAG}
 	 * flag set, and is the widget currently under the dragged widget.
 	 *
 	 * @return the dragged on widget, null if not dragging any widget
@@ -546,6 +584,7 @@ public interface Client extends OAuthApi, GameEngine
 	/**
 	 * Gets Interface ID of the root widget
 	 */
+	@Interface
 	int getTopLevelInterfaceId();
 
 	/**
@@ -562,30 +601,26 @@ public interface Client extends OAuthApi, GameEngine
 	 * @return the widget
 	 */
 	@Nullable
+	@Deprecated
 	Widget getWidget(WidgetInfo widget);
 
 	/**
 	 * Gets a widget by its raw group ID and child ID.
-	 * <p>
-	 * Note: Use {@link #getWidget(WidgetInfo)} for a more human-readable
-	 * version of this method.
 	 *
 	 * @param groupId the group ID
 	 * @param childId the child widget ID
 	 * @return the widget corresponding to the group and child pair
 	 */
 	@Nullable
-	Widget getWidget(int groupId, int childId);
+	Widget getWidget(@Interface int groupId, int childId);
 
 	/**
-	 * Gets a widget by it's packed ID.
+	 * Gets a widget by its component id.
 	 *
-	 * <p>
-	 * Note: Use {@link #getWidget(WidgetInfo)} or {@link #getWidget(int, int)} for
-	 * a more readable version of this method.
+	 * @param componentId the component id
 	 */
 	@Nullable
-	Widget getWidget(int packedID);
+	Widget getWidget(@Component int componentId);
 
 	/**
 	 * Gets an array containing the x-axis canvas positions
@@ -679,6 +714,24 @@ public interface Client extends OAuthApi, GameEngine
 	 * @return true if a menu is open, false otherwise
 	 */
 	boolean isMenuOpen();
+
+	/**
+	 * Returns whether the currently open menu is scrollable.
+	 * @return
+	 */
+	boolean isMenuScrollable();
+
+	/**
+	 * Get the number of entries the currently open menu has been scrolled down.
+	 * @return
+	 */
+	int getMenuScroll();
+
+	/**
+	 * Set the number of entries the currently open menu has been scrolled down.
+	 * @param scroll
+	 */
+	void setMenuScroll(int scroll);
 
 	/**
 	 * Get the menu x location. Only valid if the menu is open.
@@ -924,6 +977,26 @@ public interface Client extends OAuthApi, GameEngine
 	void queueChangedVarp(@Varp int varp);
 
 	/**
+	 * Open an interface.
+	 * @param componentId component id to open the interface at
+	 * @param interfaceId the interface to open
+	 * @param modalMode see {@link WidgetModalMode}
+	 * @throws IllegalStateException if the component does not exist or it not a layer, or the interface is already
+	 * open on a different component
+	 * @return the {@link WidgetNode} for the interface. This should be closed later by calling
+	 * {{@link #closeInterface(WidgetNode, boolean)}.
+	 */
+	WidgetNode openInterface(int componentId, int interfaceId, @MagicConstant(valuesFromClass = WidgetModalMode.class) int modalMode);
+
+	/**
+	 * Close an interface
+	 * @param interfaceNode the {@link WidgetNode} linking the interface into the component tree
+	 * @param unload whether to null the client's widget table
+	 * @throws IllegalArgumentException if the interfaceNode is not linked into the component tree
+	 */
+	void closeInterface(WidgetNode interfaceNode, boolean unload);
+
+	/**
 	 * Gets the widget flags table.
 	 *
 	 * @return the widget flags table
@@ -1020,9 +1093,15 @@ public interface Client extends OAuthApi, GameEngine
 	/**
 	 * Gets a entry out of a DBTable Row
 	 */
-	Object getDBTableField(int rowID, int column, int tupleIndex, int fieldIndex);
+	Object[] getDBTableField(int rowID, int column, int tupleIndex);
 
 	DBRowConfig getDBRowConfig(int rowID);
+
+	/**
+	 * Uses an index to find rows containing a certain value in a column.
+	 * An index must exist for this column.
+	 */
+	List<Integer> getDBRowsByValue(int table, int column, int tupleIndex, Object value);
 
 	/**
 	 * Get a map element config by id
@@ -1115,7 +1194,7 @@ public interface Client extends OAuthApi, GameEngine
 	 * @param endHeight end height of projectile - excludes tile height
 	 * @param target optional actor target
 	 * @param targetX target x - if an actor target is supplied should be the target x
-	 * @param targetY taret y - if an actor target is supplied should be the target y
+	 * @param targetY target y - if an actor target is supplied should be the target y
 	 * @return the new projectile
 	 */
 	Projectile createProjectile(int id, int plane, int startX, int startY, int startZ, int startCycle, int endCycle,
@@ -1198,17 +1277,6 @@ public interface Client extends OAuthApi, GameEngine
 	 * @param volume 0-255 inclusive
 	 */
 	void setMusicVolume(int volume);
-
-	/**
-	 * @return true if the current {@link #getMusicCurrentTrackId()} is a Jingle, otherwise its a Track
-	 */
-	boolean isPlayingJingle();
-
-	/**
-	 * @return Currently playing music/jingle id, or -1 if not playing
-	 * @see #isPlayingJingle()
-	 */
-	int getMusicCurrentTrackId();
 
 	/**
 	 * Play a sound effect at the player's current location. This is how UI,
@@ -1348,6 +1416,21 @@ public interface Client extends OAuthApi, GameEngine
 	String[] getStringStack();
 
 	/**
+	 * Get the size of one of the cs2 vm's arrays.
+	 * @param arrayId the array id
+	 * @return
+	 */
+	int getArraySizes(int arrayId);
+
+	/**
+	 * Get one of the cs2 vm's arrays. Use {@link #getArraySizes(int)} to get
+	 * the array length.
+	 * @param arrayId the array id
+	 * @return
+	 */
+	int[] getArray(int arrayId);
+
+	/**
 	 * Gets the cs2 vm's active widget
 	 *
 	 * This is used for all {@code cc_*} operations with a {@code 0} operand
@@ -1432,6 +1515,19 @@ public interface Client extends OAuthApi, GameEngine
 	 * @param cameraPitchTarget target camera pitch
 	 */
 	void setCameraPitchTarget(int cameraPitchTarget);
+
+	/**
+	 * Sets the camera speed
+	 * @param speed
+	 */
+	void setCameraSpeed(float speed);
+
+	/**
+	 * Sets the mask for which mouse buttons control the camera.
+	 * Use 0 for the default behavior of mouse button 4 if "middle mouse moves camera" is on.
+	 * @param mask
+	 */
+	void setCameraMouseButtonMask(int mask);
 
 	/**
 	 * Sets whether the camera pitch can exceed the normal limits set
@@ -1830,8 +1926,10 @@ public interface Client extends OAuthApi, GameEngine
 	int getSkyboxColor();
 
 	boolean isGpu();
+	void setGpuFlags(int gpuflags);
 
-	void setGpu(boolean gpu);
+	void setExpandedMapLoading(int chunks);
+	int getExpandedMapLoading();
 
 	int get3dZoom();
 	int getCenterX();
@@ -1842,8 +1940,6 @@ public interface Client extends OAuthApi, GameEngine
 	int getCameraZ2();
 
 	TextureProvider getTextureProvider();
-
-	void setRenderArea(boolean[][] renderArea);
 
 	int getRasterizer3D_clipMidX2();
 	int getRasterizer3D_clipNegativeMidX();
@@ -1879,6 +1975,11 @@ public interface Client extends OAuthApi, GameEngine
 	 * @return
 	 */
 	NodeCache getObjectCompositionCache();
+
+	/**
+	 * Returns the client {@link Animation} cache
+	 */
+	NodeCache getAnimationCache();
 
 	/**
 	 * Returns the array of cross sprites that appear and animate when left-clicking
@@ -2061,4 +2162,6 @@ public interface Client extends OAuthApi, GameEngine
 	void setMinimapTileDrawer(TileFunction drawTile);
 
 	Rasterizer getRasterizer();
+
+	void menuAction(int p0, int p1, MenuAction action, int id, int itemId, String option, String target);
 }

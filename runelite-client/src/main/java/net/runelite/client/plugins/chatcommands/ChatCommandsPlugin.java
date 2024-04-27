@@ -70,11 +70,9 @@ import net.runelite.api.events.GameTick;
 import net.runelite.api.events.ScriptPostFired;
 import net.runelite.api.events.VarbitChanged;
 import net.runelite.api.events.WidgetLoaded;
+import net.runelite.api.widgets.ComponentID;
+import net.runelite.api.widgets.InterfaceID;
 import net.runelite.api.widgets.Widget;
-import static net.runelite.api.widgets.WidgetID.ACHIEVEMENT_DIARY_SCROLL_GROUP_ID;
-import static net.runelite.api.widgets.WidgetID.ADVENTURE_LOG_ID;
-import static net.runelite.api.widgets.WidgetID.KILL_LOGS_GROUP_ID;
-import net.runelite.api.widgets.WidgetInfo;
 import net.runelite.client.callback.ClientThread;
 import net.runelite.client.chat.ChatClient;
 import net.runelite.client.chat.ChatColorType;
@@ -160,7 +158,7 @@ public class ChatCommandsPlugin extends Plugin
 	private int lastBossTime = -1;
 	private double lastPb = -1;
 	private String lastTeamSize;
-	private int modIconIdx = -1;
+	private int petsIconIdx = -1;
 	private int[] pets;
 
 	@Inject
@@ -226,22 +224,13 @@ public class ChatCommandsPlugin extends Plugin
 
 		clientThread.invoke(() ->
 		{
-			// enum config must be loaded for building pet icons
-			if (client.getModIcons() == null || client.getGameState().getState() < GameState.LOGIN_SCREEN.getState())
+			if (client.getGameState().getState() >= GameState.LOGIN_SCREEN.getState())
 			{
-				return false;
+				if (petsIconIdx == -1)
+				{
+					loadPets();
+				}
 			}
-
-			// !pets requires off thread pets access, so we just store a copy at startup
-			EnumComposition petsEnum = client.getEnum(EnumID.PETS);
-			pets = new int[petsEnum.size()];
-			for (int i = 0; i < petsEnum.size(); ++i)
-			{
-				pets[i] = petsEnum.getIntValue(i);
-			}
-
-			loadPetIcons();
-			return true;
 		});
 	}
 
@@ -310,18 +299,23 @@ public class ChatCommandsPlugin extends Plugin
 		return personalBest == null ? 0 : personalBest;
 	}
 
-	private void loadPetIcons()
+	private void loadPets()
 	{
-		if (modIconIdx != -1)
+		assert petsIconIdx == -1;
+
+		// !pets requires off thread pets access, so we just store a copy
+		EnumComposition petsEnum = client.getEnum(EnumID.PETS);
+		pets = new int[petsEnum.size()];
+		for (int i = 0; i < petsEnum.size(); ++i)
 		{
-			return;
+			pets[i] = petsEnum.getIntValue(i);
 		}
 
 		final IndexedSprite[] modIcons = client.getModIcons();
 		assert modIcons != null;
 
 		final IndexedSprite[] newModIcons = Arrays.copyOf(modIcons, modIcons.length + pets.length);
-		modIconIdx = modIcons.length;
+		petsIconIdx = modIcons.length;
 
 		client.setModIcons(newModIcons);
 
@@ -330,17 +324,15 @@ public class ChatCommandsPlugin extends Plugin
 			final int petId = pets[i];
 
 			final AsyncBufferedImage abi = itemManager.getImage(petId);
-			final int idx = modIconIdx + i;
-			Runnable r = () ->
+			final int idx = petsIconIdx + i;
+			abi.onLoaded(() ->
 			{
 				final BufferedImage image = ImageUtil.resizeImage(abi, 18, 16);
 				final IndexedSprite sprite = ImageUtil.getImageIndexedSprite(image, client);
 				// modicons array might be replaced in between when we assign it and the callback,
 				// so fetch modicons again
 				client.getModIcons()[idx] = sprite;
-			};
-			abi.onLoaded(r);
-			r.run();
+			});
 		}
 	}
 
@@ -696,7 +688,7 @@ public class ChatCommandsPlugin extends Plugin
 		{
 			advLogLoaded = false;
 
-			Widget adventureLog = client.getWidget(WidgetInfo.ADVENTURE_LOG);
+			Widget adventureLog = client.getWidget(ComponentID.ADVENTURE_LOG_CONTAINER);
 
 			if (adventureLog != null)
 			{
@@ -712,9 +704,9 @@ public class ChatCommandsPlugin extends Plugin
 		{
 			bossLogLoaded = false;
 
-			Widget title = client.getWidget(WidgetInfo.KILL_LOG_TITLE);
-			Widget bossMonster = client.getWidget(WidgetInfo.KILL_LOG_MONSTER);
-			Widget bossKills = client.getWidget(WidgetInfo.KILL_LOG_KILLS);
+			Widget title = client.getWidget(ComponentID.KILL_LOG_TITLE);
+			Widget bossMonster = client.getWidget(ComponentID.KILL_LOG_MONSTER);
+			Widget bossKills = client.getWidget(ComponentID.KILL_LOG_KILLS);
 
 			if (title == null || bossMonster == null || bossKills == null
 				|| !"Boss Kill Log".equals(title.getText()))
@@ -746,7 +738,7 @@ public class ChatCommandsPlugin extends Plugin
 
 			if (client.getLocalPlayer().getName().equals(pohOwner))
 			{
-				Widget parent = client.getWidget(WidgetInfo.ACHIEVEMENT_DIARY_SCROLL_TEXT);
+				Widget parent = client.getWidget(ComponentID.ACHIEVEMENT_DIARY_SCROLL_TEXT);
 				// Each line is a separate static child
 				Widget[] children = parent.getStaticChildren();
 				String[] text = Arrays.stream(children)
@@ -811,14 +803,14 @@ public class ChatCommandsPlugin extends Plugin
 
 		if (pohOwner == null || pohOwner.equals(client.getLocalPlayer().getName()))
 		{
-			Widget collectionLogEntryHeader = client.getWidget(WidgetInfo.COLLECTION_LOG_ENTRY_HEADER);
+			Widget collectionLogEntryHeader = client.getWidget(ComponentID.COLLECTION_LOG_ENTRY_HEADER);
 			if (collectionLogEntryHeader != null && collectionLogEntryHeader.getChildren() != null)
 			{
 				Widget entryTitle = collectionLogEntryHeader.getChild(COL_LOG_ENTRY_HEADER_TITLE_INDEX);
 				// Make sure that the player is looking in the All Pets tab of the collection log
 				if (entryTitle.getText().equals("All Pets"))
 				{
-					Widget collectionLogEntryItems = client.getWidget(WidgetInfo.COLLECTION_LOG_ENTRY_ITEMS);
+					Widget collectionLogEntryItems = client.getWidget(ComponentID.COLLECTION_LOG_ENTRY_ITEMS);
 					if (collectionLogEntryItems != null && collectionLogEntryItems.getChildren() != null)
 					{
 						List<Integer> petList = new ArrayList<>();
@@ -843,13 +835,13 @@ public class ChatCommandsPlugin extends Plugin
 	{
 		switch (widget.getGroupId())
 		{
-			case ADVENTURE_LOG_ID:
+			case InterfaceID.ADVENTURE_LOG:
 				advLogLoaded = true;
 				break;
-			case KILL_LOGS_GROUP_ID:
+			case InterfaceID.KILL_LOG:
 				bossLogLoaded = true;
 				break;
-			case ACHIEVEMENT_DIARY_SCROLL_GROUP_ID:
+			case InterfaceID.ACHIEVEMENT_DIARY_SCROLL:
 				scrollInterfaceLoaded = true;
 				break;
 		}
@@ -863,6 +855,16 @@ public class ChatCommandsPlugin extends Plugin
 			case LOADING:
 			case HOPPING:
 				pohOwner = null;
+				break;
+			case STARTING:
+				petsIconIdx = -1;
+				pets = null;
+				break;
+			case LOGIN_SCREEN:
+				if (petsIconIdx == -1)
+				{
+					loadPets();
+				}
 				break;
 		}
 	}
@@ -1323,7 +1325,7 @@ public class ChatCommandsPlugin extends Plugin
 			final int petId = pets[petIdx];
 			if (playerPetList.contains(petId))
 			{
-				responseBuilder.append(" ").img(modIconIdx + petIdx);
+				responseBuilder.append(" ").img(petsIconIdx + petIdx);
 			}
 		}
 
@@ -1966,6 +1968,10 @@ public class ChatCommandsPlugin extends Plugin
 			case "vetion":
 				return "Vet'ion";
 
+			case "calvarion":
+			case "calv":
+				return "Calvar'ion";
+
 			case "vene":
 				return "Venenatis";
 
@@ -2155,7 +2161,7 @@ public class ChatCommandsPlugin extends Plugin
 			case "tob sm":
 			case "tob story mode":
 			case "tob story":
-			case "Theatre of Blood: Entry Mode":
+			case "theatre of blood: entry mode":
 			case "tob em":
 			case "tob entry mode":
 			case "tob entry":
@@ -2184,6 +2190,11 @@ public class ChatCommandsPlugin extends Plugin
 
 			// Tombs of Amascut
 			case "toa":
+			case "tombs":
+			case "amascut":
+			case "warden":
+			case "wardens":
+			case "raids 3":
 				return "Tombs of Amascut";
 			case "toa 1":
 			case "toa solo":
@@ -2461,6 +2472,43 @@ public class ChatCommandsPlugin extends Plugin
 			case "pm":
 				return "Phantom Muspah";
 
+			// Desert Treasure 2 bosses
+			case "the leviathan":
+			case "levi":
+				return "Leviathan";
+			case "duke":
+				return "Duke Sucellus";
+			case "the whisperer":
+			case "whisp":
+			case "wisp":
+				return "Whisperer";
+			case "vard":
+				return "Vardorvis";
+
+			// dt2 awakened variants
+			case "leviathan awakened":
+			case "the leviathan awakened":
+			case "levi awakened":
+				return "Leviathan (awakened)";
+			case "duke sucellus awakened":
+			case "duke awakened":
+				return "Duke Sucellus (awakened)";
+			case "whisperer awakened":
+			case "the whisperer awakened":
+			case "whisp awakened":
+			case "wisp awakened":
+				return "Whisperer (awakened)";
+			case "vardorvis awakened":
+			case "vard awakened":
+				return "Vardorvis (awakened)";
+
+			// lunar chest variants
+			case "lunar chests":
+			case "perilous moons":
+			case "perilous moon":
+			case "moons of peril":
+				return "Lunar Chest";
+
 			default:
 				return WordUtils.capitalize(boss);
 		}
@@ -2533,7 +2581,7 @@ public class ChatCommandsPlugin extends Plugin
 				return net.runelite.api.Skill.CONSTRUCTION.getName();
 			case "ALL":
 			case "TOTAL":
-				return net.runelite.api.Skill.OVERALL.getName();
+				return "Overall";
 			default:
 				return skill;
 		}
@@ -2574,6 +2622,7 @@ public class ChatCommandsPlugin extends Plugin
 			Math.min(client.getVarbitValue(Varbits.TOA_MEMBER_2_HEALTH), 1) +
 			Math.min(client.getVarbitValue(Varbits.TOA_MEMBER_3_HEALTH), 1) +
 			Math.min(client.getVarbitValue(Varbits.TOA_MEMBER_4_HEALTH), 1) +
+			Math.min(client.getVarbitValue(Varbits.TOA_MEMBER_5_HEALTH), 1) +
 			Math.min(client.getVarbitValue(Varbits.TOA_MEMBER_6_HEALTH), 1) +
 			Math.min(client.getVarbitValue(Varbits.TOA_MEMBER_7_HEALTH), 1);
 	}

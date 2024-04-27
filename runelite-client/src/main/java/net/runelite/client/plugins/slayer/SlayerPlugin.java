@@ -58,6 +58,7 @@ import net.runelite.api.MenuAction;
 import net.runelite.api.MessageNode;
 import net.runelite.api.NPC;
 import net.runelite.api.NPCComposition;
+import net.runelite.api.ParamID;
 import net.runelite.api.VarPlayer;
 import net.runelite.api.Varbits;
 import net.runelite.api.events.ChatMessage;
@@ -332,7 +333,8 @@ public class SlayerPlugin extends Plugin
 		int varbitId = varbitChanged.getVarbitId();
 		if (varpId == VarPlayer.SLAYER_TASK_SIZE
 			|| varpId == VarPlayer.SLAYER_TASK_LOCATION
-			|| varpId == VarPlayer.SLAYER_TASK_CREATURE)
+			|| varpId == VarPlayer.SLAYER_TASK_CREATURE
+			|| varbitId == Varbits.SLAYER_TASK_BOSS)
 		{
 			clientThread.invokeLater(this::updateTask);
 		}
@@ -369,8 +371,10 @@ public class SlayerPlugin extends Plugin
 			String taskName;
 			if (taskId == 98 /* Bosses, from [proc,helper_slayer_current_assignment] */)
 			{
-				taskName = client.getEnum(EnumID.SLAYER_TASK_BOSS)
-					.getStringValue(client.getVarbitValue(Varbits.SLAYER_TASK_BOSS));
+				int structId = client.getEnum(EnumID.SLAYER_TASK)
+					.getIntValue(client.getVarbitValue(Varbits.SLAYER_TASK_BOSS));
+				taskName = client.getStructComposition(structId)
+					.getStringValue(ParamID.SLAYER_TASK_NAME);
 			}
 			else
 			{
@@ -401,7 +405,7 @@ public class SlayerPlugin extends Plugin
 			else if (!Objects.equals(taskName, this.taskName) || !Objects.equals(taskLocation, this.taskLocation))
 			{
 				log.debug("Task change: {}x {} at {}", amount, taskName, taskLocation);
-				setTask(taskName, amount, initialAmount, taskLocation, true);
+				setTask(taskName, amount, amount, taskLocation, true);
 			}
 			else if (amount != this.amount)
 			{
@@ -454,9 +458,9 @@ public class SlayerPlugin extends Plugin
 
 		String chatMsg = Text.removeTags(event.getMessage()); //remove color and linebreaks
 
-		if (chatMsg.equals(CHAT_SUPERIOR_MESSAGE) && config.showSuperiorNotification())
+		if (chatMsg.equals(CHAT_SUPERIOR_MESSAGE))
 		{
-			notifier.notify(CHAT_SUPERIOR_MESSAGE);
+			notifier.notify(config.showSuperiorNotification(), CHAT_SUPERIOR_MESSAGE);
 		}
 	}
 
@@ -600,7 +604,7 @@ public class SlayerPlugin extends Plugin
 	{
 		taskName = name;
 		amount = amt;
-		initialAmount = Math.max(amt, initAmt);
+		initialAmount = initAmt;
 		taskLocation = location;
 		save();
 		removeCounter();

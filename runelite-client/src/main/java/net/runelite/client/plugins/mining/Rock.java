@@ -89,7 +89,7 @@ enum Rock
 				return region == MINING_GUILD ? Duration.of(600, GAME_TICKS) : super.respawnTime;
 			}
 		},
-	ORE_VEIN(Duration.of(MiningRocksOverlay.ORE_VEIN_MAX_RESPAWN_TIME, GAME_TICKS), 150),
+	ORE_VEIN(Duration.ZERO /* unknown */, 150),
 	AMETHYST(Duration.of(125, GAME_TICKS), 120),
 	ASH_VEIN(Duration.of(50, GAME_TICKS), 0, ASH_PILE),
 	GEM_ROCK(Duration.of(99, GAME_TICKS), 0, GEM_ROCKS, GEM_ROCKS_11381),
@@ -99,7 +99,8 @@ enum Rock
 	BASALT(Duration.of(9, GAME_TICKS), 0, BASALT_ROCKS),
 	DAEYALT_ESSENCE(Duration.of(MiningRocksOverlay.DAEYALT_MAX_RESPAWN_TIME, GAME_TICKS), 0, DAEYALT_ESSENCE_39095),
 	BARRONITE(Duration.of(89, GAME_TICKS), 140),
-	MINERAL_VEIN(Duration.of(100, GAME_TICKS), 150);
+	MINERAL_VEIN(Duration.of(100, GAME_TICKS), 150),
+	CALCIFIED_ROCK(Duration.of(60, GAME_TICKS), 150, CALCIFIED_ROCKS, CALCIFIED_ROCKS_51487, CALCIFIED_ROCKS_51489, CALCIFIED_ROCKS_51491);
 
 	private static final int WILDERNESS_RESOURCE_AREA = 12605;
 	private static final int MISCELLANIA = 10044;
